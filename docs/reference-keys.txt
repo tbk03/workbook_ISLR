@@ -1,2 +1,4 @@
 introduction
 statistical-learning
+conceptual-exercises
+applied-exercises

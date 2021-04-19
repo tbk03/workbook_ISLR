@@ -72,7 +72,11 @@
 <li class="divider"></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Welcome</a></li>
 <li class="chapter" data-level="1" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>1</b> Introduction</a></li>
-<li class="chapter" data-level="2" data-path="statistical-learning.html"><a href="statistical-learning.html"><i class="fa fa-check"></i><b>2</b> Statistical Learning</a></li>
+<li class="chapter" data-level="2" data-path="statistical-learning.html"><a href="statistical-learning.html"><i class="fa fa-check"></i><b>2</b> Statistical Learning</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="statistical-learning.html"><a href="statistical-learning.html#conceptual-exercises"><i class="fa fa-check"></i><b>2.1</b> Conceptual Exercises</a></li>
+<li class="chapter" data-level="2.2" data-path="statistical-learning.html"><a href="statistical-learning.html#applied-exercises"><i class="fa fa-check"></i><b>2.2</b> Applied Exercises</a></li>
+</ul></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
 
@@ -95,7 +99,37 @@
             <section class="normal" id="section-">
 <div id="statistical-learning" class="section level1" number="2">
 <h1><span class="header-section-number">Chapter 2</span> Statistical Learning</h1>
+<div id="conceptual-exercises" class="section level2" number="2.1">
+<h2><span class="header-section-number">2.1</span> Conceptual Exercises</h2>
+<p><strong>Question 1: Flexible and inflexible statistical learning methods.</strong></p>
+<p><em>(a):</em> If sample size (n) is very large and the number of predictors is small (p) I would expect a flexible statistical learning method to perform better than an inflexible method. This is where sample sizes are large one can assume that the variance will be a lesser contributor to the irreducible error than bias. And, the bias of the more flexible method will be lower than the bias of the more flexible method.</p>
+<p><em>(b):</em> If there is a large number of predictors (p) and a small number of data points (n) I would expect a flexible statistical learning method to perform worse than an inflexible method. This is because a flexible method would be likely to have high variance (i.e. the component of the reducible error associated with the differences between model prediction over different training sets). Hence, the more flexible method would be more prone to overfitting the small number of training data points (than the inflexible method) and in turn be likely to return worse results. This is of course a generalisation and the performance of flexible vs. inflexible methods varies from dataset to dataset.</p>
+<p><em>(c):</em> If the relationship between the response variable and the predictor variables is highly non linear I would expect a flexible statistical learning method to perform better than an inflexible method. This is because a relatively inflexible methods (such as linear regression) tend to have assumptions around linearity embedded within them, whereas more flexible methods do not (e.g. splines).</p>
+<p><em>(d):</em> If the variance of the error terms is extremely high I would expect a flexible statistical learning method to perform worse than an inflexible method. This is because with a flexible model there would a tendency to overfit the large amount noise (i.e. very high variance in error terms) in the data. Whereas, the less flexible method would be less sensitive to the noise and in many cases could well do a better job of extracting the signal (i.e. relationship) between the predictors and the response variable.</p>
+<p><strong>Question 2: Regression or classification problems.</strong></p>
+<p><em>(a):</em></p>
+<ul>
+<li><p>Problem type: regression (salary is a continuous variable);</p></li>
+<li><p>n = 500;</p></li>
+<li><p>and, p = 3.</p></li>
+</ul>
+<p><em>(b):</em></p>
+<ul>
+<li><p>Problem type: classification (success or failure is a binary variable);</p></li>
+<li><p>n = 20;</p></li>
+<li><p>and, p = 13.</p></li>
+</ul>
+<p><em>(c):</em></p>
+<ul>
+<li><p>Problem type - regression (% change is a continuous variable);</p></li>
+<li><p>n = 52;</p></li>
+<li><p>and, p = 3.</p></li>
+</ul>
+</div>
+<div id="applied-exercises" class="section level2" number="2.2">
+<h2><span class="header-section-number">2.2</span> Applied Exercises</h2>
 
+</div>
 </div>
             </section>
 
