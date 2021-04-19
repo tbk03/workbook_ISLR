@@ -38,4 +38,72 @@
 
 -   and, p = 3.
 
+**Question 3: Bias-variance decomposition**
+
+*(a):* sketched in paper notebook.
+
+*(b):* describing the shape of typical error curves
+
+-   Bias (squared) - reduces as the flexibility of method increases because the bias represents the errors by approximating and simplifying a real world system. Less flexible methods apply more simplifications than flexible methods and hence have greater bias.
+
+-   Variance - increase as the flexibility of a method increases because the variance represents the error arising from sample process. More flexible methods are more closely fitted to the specific features of the data than less flexible models. So, overfitting of the current sample increases of model flexibility, driving increases in variance errors.
+
+-   The Training error - decrease as the flexibility of a method increases (following the bias curve plus the irreducible error). This is because variance errors are not evident in fitting to the training set, rather overfitting actually reduce training errors (giving an overly optimistic perspective on the likely performance of a method on new data).
+
+-   The test error - decreases as method flexibility increases but then increases again. This is because although the test error decrease as the bias component of the errors decreases, at some point increases in the variance component of the error drives increases in the test error. In other words there is a point at which the advantages of increase flexibility (in terms of reducing the bias component) are outweigh by the disadvantages (in terms of overfitting as the variance component increases.
+
+-   The irreducible error - is constant and by definition is the component of the error that is unaffected by method choice and parameterisation.
+
+**Question 4: Examples problems which are well suited to statistical learning methods.**
+
+Classification problems:
+
+-   Identifying if an email is or is not spam is a problem where predictions are required. The response variable would be flag indicating if an email is spam or not (in the training set this might have been set by manually reviewing the email). The predictor variables would be characteristics of the email for example the use of certain words that are prevalent in spam.
+
+-   Explaining difference in the proportion of professors who have tenured. The response variable would be a variable indicating if the professor in question has tenure. The explanatory variables could be characteristic including the gender of the professor, if they have a minority ethnic background etc.
+
+-   Predicting if an athlete will win a medal (or not) at the Olympics in a specific event. Predictor variables here could include for example performance at past Olympics, personal bests etc.
+
+Regression problems:
+
+-   Estimating the amount of plastic waste produced by a country. Here predictor variables could include GDP, population, quantitative measure of the maturity of the waste disposal system etc.
+
+-   Predicting if a given individual will make use of green spaces in their local area. Here predictor variables might include self-reported health status, age etc.
+
+-   Explaining the Green House Gas emission reductions (or increases) delivered by a country. Here predictor values might include GDP per capita, a categorical variable indicating how supportive a countries is at COP meetings, the political leanings of the governing party (on a left-right axis) etc.
+
+Clustering problems:
+
+-   Identifying if there are groups of neighborhoods within a city facing similar problems with citizens accessing green space. Here features for clustering might include the proportion of the population within easy walking distance of public green space, the amount of public green space in the neighborhood, the proportion of the population experiencing disabilities.
+
+-   Identifying if there are groups of customer (of a given business) with similar purchasing habit. Here feature for clustering might total spend per month with the business, the frequency of purchases etc.
+
+-   Identify if groups of people with similar attitudes to car sharing can be identified from survey responses. Here features for clustering might include Likhert scales responses asking about attitudes to car sharing.
+
+**Question 5: advantages and disadvantages of a very flexible method (relative to an inflexible method).**
+
+*Advantages:*
+
+-   ability to capture non-linear relationships between variables;
+
+-   ability to pick up relatively subtle associations between variables;
+
+-   can deliver more accurate prediction by modeling more of the complexity of real world systems.
+
+*Disadvantages:*
+
+-   prone to overfitting;
+
+-   large numbers of data points are required;
+
+-   computational intensive;
+
+-   can be difficult to interpret the model, and hence not so useful for inference.
+
+**Question 6: parametric and non-parametric methods**
+
+A parametric model makes as assumptions about the functional form (i.e. shape) of *f.* Where *f* is the function mapping the values of predictor/s to the values of the response variable. Based on these assumptions the general form of the model can be mathematical expressed including the predictor variables and associated co-efficients. Once a parametric model has been selected it can be fit to the data, this reduces to a problem of estimating the coefficients in the mathematical model. The primary advantage of this approach is its simplicity (estimating a set of parameters is much simpler than estimating f itself). The disadvantages are that: it can be difficult to know which model (i.e. shape) to select and picking the wrong model results in poor results; and, that flexible models are prone to overfitting.
+
+A non-parametric model does not make any assumptions about the functional form of *f.* Rather such models attempt to estimate *f* by fitting the points as closely as possible, subject to specified constraints on how 'wiggly' or smooth a line should result. The main advantage of non-parametric models is that they can fit a wide variety of shapes for *f* and the analyst does not need to make any *a priori* guesses about what the associated between predictor and response variables are. However, this advantage comes at the cost of complexity. As the problems of estimating *f* is not reduced to one of estimating parameters, very large numbers of data points are needed. Also, given non-parametric models are not constrained by assumption about the shape of *f* then care is needed to avoid overfitting (i.e. an appropriate smoothness constraint must be defined by the analyst).
+
 ## Applied Exercises
