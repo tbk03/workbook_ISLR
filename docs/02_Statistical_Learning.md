@@ -1,5 +1,50 @@
 # Statistical Learning
 
+
+```r
+library(tidyverse)
+```
+
+```
+## -- Attaching packages --------------------------------------- tidyverse 1.3.0 --
+```
+
+```
+## v ggplot2 3.3.3     v purrr   0.3.4
+## v tibble  3.1.0     v dplyr   1.0.5
+## v tidyr   1.1.3     v stringr 1.4.0
+## v readr   1.4.0     v forcats 0.5.1
+```
+
+```
+## Warning: package 'ggplot2' was built under R version 4.0.4
+```
+
+```
+## Warning: package 'tibble' was built under R version 4.0.5
+```
+
+```
+## Warning: package 'tidyr' was built under R version 4.0.4
+```
+
+```
+## Warning: package 'dplyr' was built under R version 4.0.4
+```
+
+```
+## Warning: package 'forcats' was built under R version 4.0.4
+```
+
+```
+## -- Conflicts ------------------------------------------ tidyverse_conflicts() --
+## x dplyr::filter() masks stats::filter()
+## x dplyr::lag()    masks stats::lag()
+```
+
+
+
+
 ## Conceptual Exercises
 
 **Question 1: Flexible and inflexible statistical learning methods.**
@@ -106,4 +151,246 @@ A parametric model makes as assumptions about the functional form (i.e. shape) o
 
 A non-parametric model does not make any assumptions about the functional form of *f.* Rather such models attempt to estimate *f* by fitting the points as closely as possible, subject to specified constraints on how 'wiggly' or smooth a line should result. The main advantage of non-parametric models is that they can fit a wide variety of shapes for *f* and the analyst does not need to make any *a priori* guesses about what the associated between predictor and response variables are. However, this advantage comes at the cost of complexity. As the problems of estimating *f* is not reduced to one of estimating parameters, very large numbers of data points are needed. Also, given non-parametric models are not constrained by assumption about the shape of *f* then care is needed to avoid overfitting (i.e. an appropriate smoothness constraint must be defined by the analyst).
 
+**Question 7: K-nearest neighbors**
+
+*(a):* the euclidean distance between each data point and a test point (x~1~ = x~2~ = x~3~ = 0) is shown below.
+
+
+```r
+library(tidyverse)
+
+data <- read_csv("2_7.csv") %>% 
+  mutate(dist_from_test_point = sqrt(x1^2 + x2^2 + x3^2))
+
+data %>% 
+  knitr::kable()
+```
+
+
+
+| obs| x1| x2| x3|y     | dist_from_test_point|
+|---:|--:|--:|--:|:-----|--------------------:|
+|   1|  0|  3|  0|Red   |             3.000000|
+|   2|  2|  0|  0|Red   |             2.000000|
+|   3|  0|  1|  3|Red   |             3.162278|
+|   4|  0|  1|  2|Green |             2.236068|
+|   5| -1|  0|  1|Green |             1.414214|
+|   6|  1|  1|  1|Red   |             1.732051|
+
+```r
+data %>% 
+  select(obs, dist_from_test_point) %>% 
+  knitr::kable()
+```
+
+
+
+| obs| dist_from_test_point|
+|---:|--------------------:|
+|   1|             3.000000|
+|   2|             2.000000|
+|   3|             3.162278|
+|   4|             2.236068|
+|   5|             1.414214|
+|   6|             1.732051|
+
+*(b):* Using the k-nearest neighbor method with k = 1 for the test point (x~1~ = x~2~ = x~3~ = 0) the prediction would be the Y value of the nearest point. The nearest point is 5 so the prediction would be `Green`.
+
+*(c):* If k =3, k-nearest neighbor would look at the three nearest points (y~2~ = `Red`, y~5~ = `Green` and y~6~ = `Red`). The predicted y value would be `Red` as the majority of the k nearest points have an observed y values of `Red`.
+
 ## Applied Exercises
+
+**Question 8: The Colleges Dataset**
+
+*(a):* first I read in the data for the package.
+
+
+```r
+library(ISLR)
+library(pander)
+college <- as_tibble(College)
+```
+
+*(b):* There college names are already stored as row names
+
+
+```r
+pander(head(college))
+```
+
+
+------------------------------------------------------------------------
+ Private   Apps   Accept   Enroll   Top10perc   Top25perc   F.Undergrad 
+--------- ------ -------- -------- ----------- ----------- -------------
+   Yes     1660    1232     721        23          52          2885     
+
+   Yes     2186    1924     512        16          29          2683     
+
+   Yes     1428    1097     336        22          50          1036     
+
+   Yes     417     349      137        60          89           510     
+
+   Yes     193     146       55        16          44           249     
+
+   Yes     587     479      158        38          62           678     
+------------------------------------------------------------------------
+
+Table: Table continues below
+
+ 
+-------------------------------------------------------------------------
+ P.Undergrad   Outstate   Room.Board   Books   Personal   PhD   Terminal 
+------------- ---------- ------------ ------- ---------- ----- ----------
+     537         7440        3300       450      2200     70       78    
+
+    1227        12280        6450       750      1500     29       30    
+
+     99         11250        3750       400      1165     53       66    
+
+     63         12960        5450       450      875      92       97    
+
+     869         7560        4120       800      1500     76       72    
+
+     41         13500        3335       500      675      67       73    
+-------------------------------------------------------------------------
+
+Table: Table continues below
+
+ 
+----------------------------------------------
+ S.F.Ratio   perc.alumni   Expend   Grad.Rate 
+----------- ------------- -------- -----------
+   18.1          12         7041       60     
+
+   12.2          16        10527       56     
+
+   12.9          30         8735       54     
+
+    7.7          37        19016       59     
+
+   11.9           2        10922       15     
+
+    9.4          11         9727       55     
+----------------------------------------------
+
+*(c):* First I produce the summary statistics.
+
+
+```r
+college %>% 
+  skimr::skim()
+```
+
+
+Table: (\#tab:unnamed-chunk-6)Data summary
+
+|                         |           |
+|:------------------------|:----------|
+|Name                     |Piped data |
+|Number of rows           |777        |
+|Number of columns        |18         |
+|_______________________  |           |
+|Column type frequency:   |           |
+|factor                   |1          |
+|numeric                  |17         |
+|________________________ |           |
+|Group variables          |None       |
+
+
+**Variable type: factor**
+
+|skim_variable | n_missing| complete_rate|ordered | n_unique|top_counts        |
+|:-------------|---------:|-------------:|:-------|--------:|:-----------------|
+|Private       |         0|             1|FALSE   |        2|Yes: 565, No: 212 |
+
+
+**Variable type: numeric**
+
+|skim_variable | n_missing| complete_rate|     mean|      sd|     p0|    p25|    p50|     p75|    p100|hist                                     |
+|:-------------|---------:|-------------:|--------:|-------:|------:|------:|------:|-------:|-------:|:----------------------------------------|
+|Apps          |         0|             1|  3001.64| 3870.20|   81.0|  776.0| 1558.0|  3624.0| 48094.0|▇▁▁▁▁ |
+|Accept        |         0|             1|  2018.80| 2451.11|   72.0|  604.0| 1110.0|  2424.0| 26330.0|▇▁▁▁▁ |
+|Enroll        |         0|             1|   779.97|  929.18|   35.0|  242.0|  434.0|   902.0|  6392.0|▇▁▁▁▁ |
+|Top10perc     |         0|             1|    27.56|   17.64|    1.0|   15.0|   23.0|    35.0|    96.0|▇▇▂▁▁ |
+|Top25perc     |         0|             1|    55.80|   19.80|    9.0|   41.0|   54.0|    69.0|   100.0|▂▆▇▅▃ |
+|F.Undergrad   |         0|             1|  3699.91| 4850.42|  139.0|  992.0| 1707.0|  4005.0| 31643.0|▇▁▁▁▁ |
+|P.Undergrad   |         0|             1|   855.30| 1522.43|    1.0|   95.0|  353.0|   967.0| 21836.0|▇▁▁▁▁ |
+|Outstate      |         0|             1| 10440.67| 4023.02| 2340.0| 7320.0| 9990.0| 12925.0| 21700.0|▃▇▆▂▂ |
+|Room.Board    |         0|             1|  4357.53| 1096.70| 1780.0| 3597.0| 4200.0|  5050.0|  8124.0|▂▇▆▂▁ |
+|Books         |         0|             1|   549.38|  165.11|   96.0|  470.0|  500.0|   600.0|  2340.0|▇▆▁▁▁ |
+|Personal      |         0|             1|  1340.64|  677.07|  250.0|  850.0| 1200.0|  1700.0|  6800.0|▇▃▁▁▁ |
+|PhD           |         0|             1|    72.66|   16.33|    8.0|   62.0|   75.0|    85.0|   103.0|▁▁▅▇▅ |
+|Terminal      |         0|             1|    79.70|   14.72|   24.0|   71.0|   82.0|    92.0|   100.0|▁▁▃▆▇ |
+|S.F.Ratio     |         0|             1|    14.09|    3.96|    2.5|   11.5|   13.6|    16.5|    39.8|▁▇▂▁▁ |
+|perc.alumni   |         0|             1|    22.74|   12.39|    0.0|   13.0|   21.0|    31.0|    64.0|▅▇▆▂▁ |
+|Expend        |         0|             1|  9660.17| 5221.77| 3186.0| 6751.0| 8377.0| 10830.0| 56233.0|▇▁▁▁▁ |
+|Grad.Rate     |         0|             1|    65.46|   17.18|   10.0|   53.0|   65.0|    78.0|   118.0|▁▅▇▅▁ |
+
+Then produce a scatter plot matrix for the first 10 variables.
+
+<img src="02_Statistical_Learning_files/figure-html/unnamed-chunk-7-1.png" width="672" />
+
+*(c):* next is to plot side by side boxplots of `outstate` vs `private`
+
+
+```r
+college %>% 
+  ggplot(aes(x = Outstate, y = Private)) +
+  geom_boxplot() +
+  coord_flip() +
+  
+  labs(x = "Private university?",
+       y = "Number of out of state students",
+       title = "Private universities tend to have more out of state students")
+```
+
+<img src="02_Statistical_Learning_files/figure-html/unnamed-chunk-8-1.png" width="672" />
+
+*(iv):* next is looking at universities with high proportions of students from elite high schools.
+
+
+```r
+college %>% 
+  mutate(elite = if_else(Top10perc > 50,
+                         TRUE,
+                         FALSE)) %>% 
+  group_by(elite) %>% 
+  summarise(n = n())
+```
+
+```
+## # A tibble: 2 x 2
+##   elite     n
+##   <lgl> <int>
+## 1 FALSE   699
+## 2 TRUE     78
+```
+*(v):* next looking at producing some histograms for a couple of continuous variables of interest (full and part time undergraduates)
+
+```r
+library(patchwork)
+
+p <- college %>% 
+  select(F.Undergrad, P.Undergrad) %>% 
+  mutate(id = row_number(), .before = F.Undergrad) %>% 
+  pivot_longer(cols = c(F.Undergrad, P.Undergrad), 
+               names_to = "student_status", 
+               values_to = "number_of_students") %>% 
+  
+  ggplot(aes(number_of_students)) +
+  geom_histogram(aes(fill = student_status), bins = 100) +
+  facet_wrap(~student_status) +
+  guides(fill = FALSE) +
+  labs(x = "Number of students attending",
+       y = "Number of universities")
+
+p_zoom <- p + coord_cartesian(xlim = c(0,2500)) +
+  labs(subtitle = "Zooming on smaller cohort sizes")
+
+p / p_zoom +
+  plot_annotation(title = "Differing frequencies of full and part-time students cohort sizes")
+```
+
+<img src="02_Statistical_Learning_files/figure-html/unnamed-chunk-10-1.png" width="672" />
+
+

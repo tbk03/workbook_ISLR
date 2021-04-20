@@ -24,7 +24,7 @@
 <meta name="author" content="Chris J. Martin" />
 
 
-<meta name="date" content="2021-04-19" />
+<meta name="date" content="2021-04-20" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -53,6 +53,70 @@
 
 
 
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
 
 <link rel="stylesheet" href="style.css" type="text/css" />
 </head>
@@ -99,6 +163,20 @@
             <section class="normal" id="section-">
 <div id="statistical-learning" class="section level1" number="2">
 <h1><span class="header-section-number">Chapter 2</span> Statistical Learning</h1>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="statistical-learning.html#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code></pre></div>
+<pre><code>## -- Attaching packages --------------------------------------- tidyverse 1.3.0 --</code></pre>
+<pre><code>## v ggplot2 3.3.3     v purrr   0.3.4
+## v tibble  3.1.0     v dplyr   1.0.5
+## v tidyr   1.1.3     v stringr 1.4.0
+## v readr   1.4.0     v forcats 0.5.1</code></pre>
+<pre><code>## Warning: package &#39;ggplot2&#39; was built under R version 4.0.4</code></pre>
+<pre><code>## Warning: package &#39;tibble&#39; was built under R version 4.0.5</code></pre>
+<pre><code>## Warning: package &#39;tidyr&#39; was built under R version 4.0.4</code></pre>
+<pre><code>## Warning: package &#39;dplyr&#39; was built under R version 4.0.4</code></pre>
+<pre><code>## Warning: package &#39;forcats&#39; was built under R version 4.0.4</code></pre>
+<pre><code>## -- Conflicts ------------------------------------------ tidyverse_conflicts() --
+## x dplyr::filter() masks stats::filter()
+## x dplyr::lag()    masks stats::lag()</code></pre>
 <div id="conceptual-exercises" class="section level2" number="2.1">
 <h2><span class="header-section-number">2.1</span> Conceptual Exercises</h2>
 <p><strong>Question 1: Flexible and inflexible statistical learning methods.</strong></p>
@@ -171,9 +249,693 @@
 <p><strong>Question 6: parametric and non-parametric methods</strong></p>
 <p>A parametric model makes as assumptions about the functional form (i.e. shape) of <em>f.</em> Where <em>f</em> is the function mapping the values of predictor/s to the values of the response variable. Based on these assumptions the general form of the model can be mathematical expressed including the predictor variables and associated co-efficients. Once a parametric model has been selected it can be fit to the data, this reduces to a problem of estimating the coefficients in the mathematical model. The primary advantage of this approach is its simplicity (estimating a set of parameters is much simpler than estimating f itself). The disadvantages are that: it can be difficult to know which model (i.e. shape) to select and picking the wrong model results in poor results; and, that flexible models are prone to overfitting.</p>
 <p>A non-parametric model does not make any assumptions about the functional form of <em>f.</em> Rather such models attempt to estimate <em>f</em> by fitting the points as closely as possible, subject to specified constraints on how ‘wiggly’ or smooth a line should result. The main advantage of non-parametric models is that they can fit a wide variety of shapes for <em>f</em> and the analyst does not need to make any <em>a priori</em> guesses about what the associated between predictor and response variables are. However, this advantage comes at the cost of complexity. As the problems of estimating <em>f</em> is not reduced to one of estimating parameters, very large numbers of data points are needed. Also, given non-parametric models are not constrained by assumption about the shape of <em>f</em> then care is needed to avoid overfitting (i.e. an appropriate smoothness constraint must be defined by the analyst).</p>
+<p><strong>Question 7: K-nearest neighbors</strong></p>
+<p><em>(a):</em> the euclidean distance between each data point and a test point (x<sub>1</sub> = x<sub>2</sub> = x<sub>3</sub> = 0) is shown below.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="statistical-learning.html#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb10-2"><a href="statistical-learning.html#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="statistical-learning.html#cb10-3" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">&quot;2_7.csv&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb10-4"><a href="statistical-learning.html#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">dist_from_test_point =</span> <span class="fu">sqrt</span>(x1<span class="sc">^</span><span class="dv">2</span> <span class="sc">+</span> x2<span class="sc">^</span><span class="dv">2</span> <span class="sc">+</span> x3<span class="sc">^</span><span class="dv">2</span>))</span>
+<span id="cb10-5"><a href="statistical-learning.html#cb10-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-6"><a href="statistical-learning.html#cb10-6" aria-hidden="true" tabindex="-1"></a>data <span class="sc">%&gt;%</span> </span>
+<span id="cb10-7"><a href="statistical-learning.html#cb10-7" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>()</span></code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="right">obs</th>
+<th align="right">x1</th>
+<th align="right">x2</th>
+<th align="right">x3</th>
+<th align="left">y</th>
+<th align="right">dist_from_test_point</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">3</td>
+<td align="right">0</td>
+<td align="left">Red</td>
+<td align="right">3.000000</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="right">2</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="left">Red</td>
+<td align="right">2.000000</td>
+</tr>
+<tr class="odd">
+<td align="right">3</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">3</td>
+<td align="left">Red</td>
+<td align="right">3.162278</td>
+</tr>
+<tr class="even">
+<td align="right">4</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">2</td>
+<td align="left">Green</td>
+<td align="right">2.236068</td>
+</tr>
+<tr class="odd">
+<td align="right">5</td>
+<td align="right">-1</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="left">Green</td>
+<td align="right">1.414214</td>
+</tr>
+<tr class="even">
+<td align="right">6</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="left">Red</td>
+<td align="right">1.732051</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="statistical-learning.html#cb11-1" aria-hidden="true" tabindex="-1"></a>data <span class="sc">%&gt;%</span> </span>
+<span id="cb11-2"><a href="statistical-learning.html#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(obs, dist_from_test_point) <span class="sc">%&gt;%</span> </span>
+<span id="cb11-3"><a href="statistical-learning.html#cb11-3" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>()</span></code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="right">obs</th>
+<th align="right">dist_from_test_point</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">3.000000</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="right">2.000000</td>
+</tr>
+<tr class="odd">
+<td align="right">3</td>
+<td align="right">3.162278</td>
+</tr>
+<tr class="even">
+<td align="right">4</td>
+<td align="right">2.236068</td>
+</tr>
+<tr class="odd">
+<td align="right">5</td>
+<td align="right">1.414214</td>
+</tr>
+<tr class="even">
+<td align="right">6</td>
+<td align="right">1.732051</td>
+</tr>
+</tbody>
+</table>
+<p><em>(b):</em> Using the k-nearest neighbor method with k = 1 for the test point (x<sub>1</sub> = x<sub>2</sub> = x<sub>3</sub> = 0) the prediction would be the Y value of the nearest point. The nearest point is 5 so the prediction would be <code>Green</code>.</p>
+<p><em>(c):</em> If k =3, k-nearest neighbor would look at the three nearest points (y<sub>2</sub> = <code>Red</code>, y<sub>5</sub> = <code>Green</code> and y<sub>6</sub> = <code>Red</code>). The predicted y value would be <code>Red</code> as the majority of the k nearest points have an observed y values of <code>Red</code>.</p>
 </div>
 <div id="applied-exercises" class="section level2" number="2.2">
 <h2><span class="header-section-number">2.2</span> Applied Exercises</h2>
+<p><strong>Question 8: The Colleges Dataset</strong></p>
+<p><em>(a):</em> first I read in the data for the package.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="statistical-learning.html#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ISLR)</span>
+<span id="cb12-2"><a href="statistical-learning.html#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(pander)</span>
+<span id="cb12-3"><a href="statistical-learning.html#cb12-3" aria-hidden="true" tabindex="-1"></a>college <span class="ot">&lt;-</span> <span class="fu">as_tibble</span>(College)</span></code></pre></div>
+<p><em>(b):</em> There college names are already stored as row names</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="statistical-learning.html#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pander</span>(<span class="fu">head</span>(college))</span></code></pre></div>
+<table style="width:100%;">
+<caption>Table continues below</caption>
+<colgroup>
+<col width="13%" />
+<col width="9%" />
+<col width="12%" />
+<col width="12%" />
+<col width="16%" />
+<col width="16%" />
+<col width="19%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="center">Private</th>
+<th align="center">Apps</th>
+<th align="center">Accept</th>
+<th align="center">Enroll</th>
+<th align="center">Top10perc</th>
+<th align="center">Top25perc</th>
+<th align="center">F.Undergrad</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">Yes</td>
+<td align="center">1660</td>
+<td align="center">1232</td>
+<td align="center">721</td>
+<td align="center">23</td>
+<td align="center">52</td>
+<td align="center">2885</td>
+</tr>
+<tr class="even">
+<td align="center">Yes</td>
+<td align="center">2186</td>
+<td align="center">1924</td>
+<td align="center">512</td>
+<td align="center">16</td>
+<td align="center">29</td>
+<td align="center">2683</td>
+</tr>
+<tr class="odd">
+<td align="center">Yes</td>
+<td align="center">1428</td>
+<td align="center">1097</td>
+<td align="center">336</td>
+<td align="center">22</td>
+<td align="center">50</td>
+<td align="center">1036</td>
+</tr>
+<tr class="even">
+<td align="center">Yes</td>
+<td align="center">417</td>
+<td align="center">349</td>
+<td align="center">137</td>
+<td align="center">60</td>
+<td align="center">89</td>
+<td align="center">510</td>
+</tr>
+<tr class="odd">
+<td align="center">Yes</td>
+<td align="center">193</td>
+<td align="center">146</td>
+<td align="center">55</td>
+<td align="center">16</td>
+<td align="center">44</td>
+<td align="center">249</td>
+</tr>
+<tr class="even">
+<td align="center">Yes</td>
+<td align="center">587</td>
+<td align="center">479</td>
+<td align="center">158</td>
+<td align="center">38</td>
+<td align="center">62</td>
+<td align="center">678</td>
+</tr>
+</tbody>
+</table>
+<table>
+<caption>Table continues below</caption>
+<colgroup>
+<col width="18%" />
+<col width="14%" />
+<col width="17%" />
+<col width="10%" />
+<col width="14%" />
+<col width="8%" />
+<col width="14%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="center">P.Undergrad</th>
+<th align="center">Outstate</th>
+<th align="center">Room.Board</th>
+<th align="center">Books</th>
+<th align="center">Personal</th>
+<th align="center">PhD</th>
+<th align="center">Terminal</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">537</td>
+<td align="center">7440</td>
+<td align="center">3300</td>
+<td align="center">450</td>
+<td align="center">2200</td>
+<td align="center">70</td>
+<td align="center">78</td>
+</tr>
+<tr class="even">
+<td align="center">1227</td>
+<td align="center">12280</td>
+<td align="center">6450</td>
+<td align="center">750</td>
+<td align="center">1500</td>
+<td align="center">29</td>
+<td align="center">30</td>
+</tr>
+<tr class="odd">
+<td align="center">99</td>
+<td align="center">11250</td>
+<td align="center">3750</td>
+<td align="center">400</td>
+<td align="center">1165</td>
+<td align="center">53</td>
+<td align="center">66</td>
+</tr>
+<tr class="even">
+<td align="center">63</td>
+<td align="center">12960</td>
+<td align="center">5450</td>
+<td align="center">450</td>
+<td align="center">875</td>
+<td align="center">92</td>
+<td align="center">97</td>
+</tr>
+<tr class="odd">
+<td align="center">869</td>
+<td align="center">7560</td>
+<td align="center">4120</td>
+<td align="center">800</td>
+<td align="center">1500</td>
+<td align="center">76</td>
+<td align="center">72</td>
+</tr>
+<tr class="even">
+<td align="center">41</td>
+<td align="center">13500</td>
+<td align="center">3335</td>
+<td align="center">500</td>
+<td align="center">675</td>
+<td align="center">67</td>
+<td align="center">73</td>
+</tr>
+</tbody>
+</table>
+<table style="width:65%;">
+<colgroup>
+<col width="16%" />
+<col width="19%" />
+<col width="12%" />
+<col width="16%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="center">S.F.Ratio</th>
+<th align="center">perc.alumni</th>
+<th align="center">Expend</th>
+<th align="center">Grad.Rate</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">18.1</td>
+<td align="center">12</td>
+<td align="center">7041</td>
+<td align="center">60</td>
+</tr>
+<tr class="even">
+<td align="center">12.2</td>
+<td align="center">16</td>
+<td align="center">10527</td>
+<td align="center">56</td>
+</tr>
+<tr class="odd">
+<td align="center">12.9</td>
+<td align="center">30</td>
+<td align="center">8735</td>
+<td align="center">54</td>
+</tr>
+<tr class="even">
+<td align="center">7.7</td>
+<td align="center">37</td>
+<td align="center">19016</td>
+<td align="center">59</td>
+</tr>
+<tr class="odd">
+<td align="center">11.9</td>
+<td align="center">2</td>
+<td align="center">10922</td>
+<td align="center">15</td>
+</tr>
+<tr class="even">
+<td align="center">9.4</td>
+<td align="center">11</td>
+<td align="center">9727</td>
+<td align="center">55</td>
+</tr>
+</tbody>
+</table>
+<p><em>(c):</em> First I produce the summary statistics.</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="statistical-learning.html#cb14-1" aria-hidden="true" tabindex="-1"></a>college <span class="sc">%&gt;%</span> </span>
+<span id="cb14-2"><a href="statistical-learning.html#cb14-2" aria-hidden="true" tabindex="-1"></a>  skimr<span class="sc">::</span><span class="fu">skim</span>()</span></code></pre></div>
+<table>
+<caption><span id="tab:unnamed-chunk-6">Table 2.1: </span>Data summary</caption>
+<tbody>
+<tr class="odd">
+<td align="left">Name</td>
+<td align="left">Piped data</td>
+</tr>
+<tr class="even">
+<td align="left">Number of rows</td>
+<td align="left">777</td>
+</tr>
+<tr class="odd">
+<td align="left">Number of columns</td>
+<td align="left">18</td>
+</tr>
+<tr class="even">
+<td align="left">_______________________</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">Column type frequency:</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">factor</td>
+<td align="left">1</td>
+</tr>
+<tr class="odd">
+<td align="left">numeric</td>
+<td align="left">17</td>
+</tr>
+<tr class="even">
+<td align="left">________________________</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">Group variables</td>
+<td align="left">None</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: factor</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">skim_variable</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="left">ordered</th>
+<th align="right">n_unique</th>
+<th align="left">top_counts</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Private</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="left">FALSE</td>
+<td align="right">2</td>
+<td align="left">Yes: 565, No: 212</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: numeric</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">skim_variable</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="right">mean</th>
+<th align="right">sd</th>
+<th align="right">p0</th>
+<th align="right">p25</th>
+<th align="right">p50</th>
+<th align="right">p75</th>
+<th align="right">p100</th>
+<th align="left">hist</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Apps</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">3001.64</td>
+<td align="right">3870.20</td>
+<td align="right">81.0</td>
+<td align="right">776.0</td>
+<td align="right">1558.0</td>
+<td align="right">3624.0</td>
+<td align="right">48094.0</td>
+<td align="left">▇▁▁▁▁</td>
+</tr>
+<tr class="even">
+<td align="left">Accept</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">2018.80</td>
+<td align="right">2451.11</td>
+<td align="right">72.0</td>
+<td align="right">604.0</td>
+<td align="right">1110.0</td>
+<td align="right">2424.0</td>
+<td align="right">26330.0</td>
+<td align="left">▇▁▁▁▁</td>
+</tr>
+<tr class="odd">
+<td align="left">Enroll</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">779.97</td>
+<td align="right">929.18</td>
+<td align="right">35.0</td>
+<td align="right">242.0</td>
+<td align="right">434.0</td>
+<td align="right">902.0</td>
+<td align="right">6392.0</td>
+<td align="left">▇▁▁▁▁</td>
+</tr>
+<tr class="even">
+<td align="left">Top10perc</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">27.56</td>
+<td align="right">17.64</td>
+<td align="right">1.0</td>
+<td align="right">15.0</td>
+<td align="right">23.0</td>
+<td align="right">35.0</td>
+<td align="right">96.0</td>
+<td align="left">▇▇▂▁▁</td>
+</tr>
+<tr class="odd">
+<td align="left">Top25perc</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">55.80</td>
+<td align="right">19.80</td>
+<td align="right">9.0</td>
+<td align="right">41.0</td>
+<td align="right">54.0</td>
+<td align="right">69.0</td>
+<td align="right">100.0</td>
+<td align="left">▂▆▇▅▃</td>
+</tr>
+<tr class="even">
+<td align="left">F.Undergrad</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">3699.91</td>
+<td align="right">4850.42</td>
+<td align="right">139.0</td>
+<td align="right">992.0</td>
+<td align="right">1707.0</td>
+<td align="right">4005.0</td>
+<td align="right">31643.0</td>
+<td align="left">▇▁▁▁▁</td>
+</tr>
+<tr class="odd">
+<td align="left">P.Undergrad</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">855.30</td>
+<td align="right">1522.43</td>
+<td align="right">1.0</td>
+<td align="right">95.0</td>
+<td align="right">353.0</td>
+<td align="right">967.0</td>
+<td align="right">21836.0</td>
+<td align="left">▇▁▁▁▁</td>
+</tr>
+<tr class="even">
+<td align="left">Outstate</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">10440.67</td>
+<td align="right">4023.02</td>
+<td align="right">2340.0</td>
+<td align="right">7320.0</td>
+<td align="right">9990.0</td>
+<td align="right">12925.0</td>
+<td align="right">21700.0</td>
+<td align="left">▃▇▆▂▂</td>
+</tr>
+<tr class="odd">
+<td align="left">Room.Board</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">4357.53</td>
+<td align="right">1096.70</td>
+<td align="right">1780.0</td>
+<td align="right">3597.0</td>
+<td align="right">4200.0</td>
+<td align="right">5050.0</td>
+<td align="right">8124.0</td>
+<td align="left">▂▇▆▂▁</td>
+</tr>
+<tr class="even">
+<td align="left">Books</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">549.38</td>
+<td align="right">165.11</td>
+<td align="right">96.0</td>
+<td align="right">470.0</td>
+<td align="right">500.0</td>
+<td align="right">600.0</td>
+<td align="right">2340.0</td>
+<td align="left">▇▆▁▁▁</td>
+</tr>
+<tr class="odd">
+<td align="left">Personal</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">1340.64</td>
+<td align="right">677.07</td>
+<td align="right">250.0</td>
+<td align="right">850.0</td>
+<td align="right">1200.0</td>
+<td align="right">1700.0</td>
+<td align="right">6800.0</td>
+<td align="left">▇▃▁▁▁</td>
+</tr>
+<tr class="even">
+<td align="left">PhD</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">72.66</td>
+<td align="right">16.33</td>
+<td align="right">8.0</td>
+<td align="right">62.0</td>
+<td align="right">75.0</td>
+<td align="right">85.0</td>
+<td align="right">103.0</td>
+<td align="left">▁▁▅▇▅</td>
+</tr>
+<tr class="odd">
+<td align="left">Terminal</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">79.70</td>
+<td align="right">14.72</td>
+<td align="right">24.0</td>
+<td align="right">71.0</td>
+<td align="right">82.0</td>
+<td align="right">92.0</td>
+<td align="right">100.0</td>
+<td align="left">▁▁▃▆▇</td>
+</tr>
+<tr class="even">
+<td align="left">S.F.Ratio</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">14.09</td>
+<td align="right">3.96</td>
+<td align="right">2.5</td>
+<td align="right">11.5</td>
+<td align="right">13.6</td>
+<td align="right">16.5</td>
+<td align="right">39.8</td>
+<td align="left">▁▇▂▁▁</td>
+</tr>
+<tr class="odd">
+<td align="left">perc.alumni</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">22.74</td>
+<td align="right">12.39</td>
+<td align="right">0.0</td>
+<td align="right">13.0</td>
+<td align="right">21.0</td>
+<td align="right">31.0</td>
+<td align="right">64.0</td>
+<td align="left">▅▇▆▂▁</td>
+</tr>
+<tr class="even">
+<td align="left">Expend</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">9660.17</td>
+<td align="right">5221.77</td>
+<td align="right">3186.0</td>
+<td align="right">6751.0</td>
+<td align="right">8377.0</td>
+<td align="right">10830.0</td>
+<td align="right">56233.0</td>
+<td align="left">▇▁▁▁▁</td>
+</tr>
+<tr class="odd">
+<td align="left">Grad.Rate</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">65.46</td>
+<td align="right">17.18</td>
+<td align="right">10.0</td>
+<td align="right">53.0</td>
+<td align="right">65.0</td>
+<td align="right">78.0</td>
+<td align="right">118.0</td>
+<td align="left">▁▅▇▅▁</td>
+</tr>
+</tbody>
+</table>
+<p>Then produce a scatter plot matrix for the first 10 variables.</p>
+<p><img src="02_Statistical_Learning_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<p><em>(c):</em> next is to plot side by side boxplots of <code>outstate</code> vs <code>private</code></p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="statistical-learning.html#cb15-1" aria-hidden="true" tabindex="-1"></a>college <span class="sc">%&gt;%</span> </span>
+<span id="cb15-2"><a href="statistical-learning.html#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> Outstate, <span class="at">y =</span> Private)) <span class="sc">+</span></span>
+<span id="cb15-3"><a href="statistical-learning.html#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
+<span id="cb15-4"><a href="statistical-learning.html#cb15-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_flip</span>() <span class="sc">+</span></span>
+<span id="cb15-5"><a href="statistical-learning.html#cb15-5" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb15-6"><a href="statistical-learning.html#cb15-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Private university?&quot;</span>,</span>
+<span id="cb15-7"><a href="statistical-learning.html#cb15-7" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Number of out of state students&quot;</span>,</span>
+<span id="cb15-8"><a href="statistical-learning.html#cb15-8" aria-hidden="true" tabindex="-1"></a>       <span class="at">title =</span> <span class="st">&quot;Private universities tend to have more out of state students&quot;</span>)</span></code></pre></div>
+<p><img src="02_Statistical_Learning_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<p><em>(iv):</em> next is looking at universities with high proportions of students from elite high schools.</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="statistical-learning.html#cb16-1" aria-hidden="true" tabindex="-1"></a>college <span class="sc">%&gt;%</span> </span>
+<span id="cb16-2"><a href="statistical-learning.html#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">elite =</span> <span class="fu">if_else</span>(Top10perc <span class="sc">&gt;</span> <span class="dv">50</span>,</span>
+<span id="cb16-3"><a href="statistical-learning.html#cb16-3" aria-hidden="true" tabindex="-1"></a>                         <span class="cn">TRUE</span>,</span>
+<span id="cb16-4"><a href="statistical-learning.html#cb16-4" aria-hidden="true" tabindex="-1"></a>                         <span class="cn">FALSE</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb16-5"><a href="statistical-learning.html#cb16-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(elite) <span class="sc">%&gt;%</span> </span>
+<span id="cb16-6"><a href="statistical-learning.html#cb16-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">n =</span> <span class="fu">n</span>())</span></code></pre></div>
+<pre><code>## # A tibble: 2 x 2
+##   elite     n
+##   &lt;lgl&gt; &lt;int&gt;
+## 1 FALSE   699
+## 2 TRUE     78</code></pre>
+<p><em>(v):</em> next looking at producing some histograms for a couple of continuous variables of interest (full and part time undergraduates)</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="statistical-learning.html#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(patchwork)</span>
+<span id="cb18-2"><a href="statistical-learning.html#cb18-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-3"><a href="statistical-learning.html#cb18-3" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> college <span class="sc">%&gt;%</span> </span>
+<span id="cb18-4"><a href="statistical-learning.html#cb18-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(F.Undergrad, P.Undergrad) <span class="sc">%&gt;%</span> </span>
+<span id="cb18-5"><a href="statistical-learning.html#cb18-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">id =</span> <span class="fu">row_number</span>(), <span class="at">.before =</span> F.Undergrad) <span class="sc">%&gt;%</span> </span>
+<span id="cb18-6"><a href="statistical-learning.html#cb18-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">c</span>(F.Undergrad, P.Undergrad), </span>
+<span id="cb18-7"><a href="statistical-learning.html#cb18-7" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="st">&quot;student_status&quot;</span>, </span>
+<span id="cb18-8"><a href="statistical-learning.html#cb18-8" aria-hidden="true" tabindex="-1"></a>               <span class="at">values_to =</span> <span class="st">&quot;number_of_students&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb18-9"><a href="statistical-learning.html#cb18-9" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb18-10"><a href="statistical-learning.html#cb18-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(number_of_students)) <span class="sc">+</span></span>
+<span id="cb18-11"><a href="statistical-learning.html#cb18-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="fu">aes</span>(<span class="at">fill =</span> student_status), <span class="at">bins =</span> <span class="dv">100</span>) <span class="sc">+</span></span>
+<span id="cb18-12"><a href="statistical-learning.html#cb18-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>student_status) <span class="sc">+</span></span>
+<span id="cb18-13"><a href="statistical-learning.html#cb18-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">guides</span>(<span class="at">fill =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb18-14"><a href="statistical-learning.html#cb18-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Number of students attending&quot;</span>,</span>
+<span id="cb18-15"><a href="statistical-learning.html#cb18-15" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Number of universities&quot;</span>)</span>
+<span id="cb18-16"><a href="statistical-learning.html#cb18-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-17"><a href="statistical-learning.html#cb18-17" aria-hidden="true" tabindex="-1"></a>p_zoom <span class="ot">&lt;-</span> p <span class="sc">+</span> <span class="fu">coord_cartesian</span>(<span class="at">xlim =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">2500</span>)) <span class="sc">+</span></span>
+<span id="cb18-18"><a href="statistical-learning.html#cb18-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">subtitle =</span> <span class="st">&quot;Zooming on smaller cohort sizes&quot;</span>)</span>
+<span id="cb18-19"><a href="statistical-learning.html#cb18-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-20"><a href="statistical-learning.html#cb18-20" aria-hidden="true" tabindex="-1"></a>p <span class="sc">/</span> p_zoom <span class="sc">+</span></span>
+<span id="cb18-21"><a href="statistical-learning.html#cb18-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot_annotation</span>(<span class="at">title =</span> <span class="st">&quot;Differing frequencies of full and part-time students cohort sizes&quot;</span>)</span></code></pre></div>
+<p><img src="02_Statistical_Learning_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
 
 </div>
 </div>
