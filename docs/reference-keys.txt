@@ -1,4 +1,3 @@
-tab:unnamed-chunk-6
 introduction
 statistical-learning
 conceptual-exercises

@@ -4,11 +4,11 @@
 library(tidyverse)
 ```
 
-
 ```{r, include = FALSE}
 # global settings for producing html output
-knitr::opts_chunk$set(warning = FALSE,  # remove for readability
-                      message = FALSE)#,  # remove for readability
+knitr::opts_chunk$set(warning = FALSE,                  # remove for readability
+                      message = FALSE,                  # remove for readability
+                      skimr_include_summary = FALSE)    # remove for readability
                       #cache = TRUE)   # for inclusion during coding
 
 # set default theme for plots
@@ -199,7 +199,9 @@ college %>%
   summarise(n = n())
   
 ```
+
 *(v):* next looking at producing some histograms for a couple of continuous variables of interest (full and part time undergraduates)
+
 ```{r}
 library(patchwork)
 
@@ -224,4 +226,142 @@ p / p_zoom +
   plot_annotation(title = "Differing frequencies of full and part-time students cohort sizes")
 ```
 
+*(vi):* Continuing the exploratory data analysis, my key findings were as follows:
 
+-   Private universities appear to have higher graduation rates than public universities.
+
+```{r}
+
+college %>% 
+  
+  # remove an outlier with impossible graduation rate
+  filter(Grad.Rate <= 100) %>%
+  
+  # produce plot base
+  ggplot(aes(Private, Grad.Rate)) +
+  
+  # add data points as background layer
+  geom_jitter(alpha = 0.5, width = 0.2, colour = "lightblue") +
+  geom_boxplot(fill = NA, outlier.shape = NA,
+               size = 1) +
+  
+  # add labels
+  labs(x = "Private university?",
+       y = "Graduation rate",
+       title = "Private universities appear to have higher graduation rates\n")
+```
+
+-   More selective universities appear to have higher graduation rates.
+
+```{r}
+college %>% 
+  
+  # remove an outlier with impossible graduation rate
+  filter(Grad.Rate <= 100) %>%
+  
+  # create plot base
+  ggplot(aes(cut_width(Accept / Apps * 100, 
+                       width = 20,
+                       boundary = 0), Grad.Rate)) +
+  
+  # add data points as a background layer
+  geom_jitter(alpha = 0.5, colour = "lightblue", width = 0.2)+
+  
+  # add boxplots
+  geom_boxplot(width = 0.2, alpha = 0) +
+  
+  # format scales for readability
+  scale_x_discrete(labels = c("0-19%", "20-39%", "40-59%", "60-79%", "80-100%")) +
+  scale_y_continuous(labels = scales::percent_format(scale = 1)) +
+  
+  # add labels
+  labs(x = "\nPercentage of applications accepted",
+       y = "Percentage of students graduating\n",
+       title = "More selective universities appear to have higher graduation rates\n")
+
+```
+
+**Question 9: The Auto dataset**
+
+*(a):*
+
+-   Quantitative predictors: `mpg`, `cylinders`, `displacement`, `horsepower`, `weight`, `acceleration`, `year` and `origin`.
+
+-   Qualitative predictor: `name.`
+
+*(b):* The range for each quantiative variable is shown in the skim dataframe below (p0 corresponds to the minimum and p100 corresponds to the maximum).
+
+*(c):* The mean and standard deviations for each quantiative variable is shown in the skim dataframe below.
+
+```{r}
+skimr::skim(Auto) %>% 
+  select(-n_missing, -complete_rate)
+
+```
+
+*(d):* The means and standard deviations for the quantitative variables for the dataset (minus the 10th and 85th rows) are shown in the skim dataframe below.
+
+```{r}
+autos_omit <- slice(Auto, -10, -85)
+
+skimr::skim(autos_omit) %>% 
+  select(-n_missing, -complete_rate)
+```
+
+*(e and f):* The correlation plot below shows a high degree of correlation between four predictor variables (`cylinders`, `displacement`, `horsepower` and `weight`). There is also a high degree of correlation between these three predictors and the response variable (`mpg`).
+
+```{r}
+GGally::ggcorr(Auto, label = TRUE)
+```
+
+Scatter plots can help use look at these four predictor variables in more detail.
+
+```{r}
+ggplot(Auto,
+       aes(factor(cylinders), mpg)) +
+  geom_jitter(colour = "lightblue", width = 0.2) +
+  geom_boxplot(width = 0.3, alpha = 0) +
+  labs(x = "\nNumber of Cylinders",
+       y = "Fuel economy (mpg)\n",
+       title = "There is a negative association between the number of cylinders\nand fuel economy\n")
+```
+
+```{r}
+ggplot(Auto,
+       aes(displacement, mpg)) +
+  geom_point(alpha = 0.5) +
+  geom_smooth(method = "lm", se = FALSE) +
+  scale_x_log10(breaks = c(0, 10, 100, 200, 400)) +
+  expand_limits(x = 0, y = 0) +
+  labs(x = "\nEngine displacement (on a log transformed scale)\n",
+       y = "Fuel economy (mpg)\n",
+       title = "There is a negative association between the\nlogarithm of engine displacement and fuel economy\n")
+```
+
+```{r}
+ggplot(Auto,
+       aes(horsepower, mpg)) +
+  geom_point(alpha = 0.5) +
+  geom_smooth(method = "lm", se = FALSE) +
+  scale_x_log10() +
+  expand_limits(x = 0, y = 0) +
+  
+  labs(x = "Horsepower (on a log scale)",
+       y = "Fuel Economy (mpg)",
+       title = "There is a negative association between the\nlogarithm of horsepower and fuel economy\n")
+```
+
+```{r}
+ggplot(Auto,
+       aes(weight, mpg)) +
+  geom_point(alpha = 0.5) +
+  geom_smooth(method = "lm", se = FALSE) +
+  scale_x_log10() +
+  labs(x = "Weight in kgs (on a log scale)",
+       y = "Fuel economy (mpg)",
+       title = "There is a negative association between the\nlogarithm of weight and fuel economy\n")
+```
+
+Each of the four variables plotted above could be useful predictors of fuel economy. Additionally, the correlation plot also identified two other variables with reasonably strong correlations with fuel economy: `year` and `origin`. If I was going to proceed to develop a model using this data, it would be worth looking at `year` and `origin` in more detail.
+
+**Question 8: The Boston Housing dataset.**

@@ -6,7 +6,11 @@ library(tidyverse)
 ```
 
 ```
-## -- Attaching packages --------------------------------------- tidyverse 1.3.0 --
+## Warning: package 'tidyverse' was built under R version 4.0.5
+```
+
+```
+## -- Attaching packages --------------------------------------- tidyverse 1.3.1 --
 ```
 
 ```
@@ -41,7 +45,6 @@ library(tidyverse)
 ## x dplyr::filter() masks stats::filter()
 ## x dplyr::lag()    masks stats::lag()
 ```
-
 
 
 
@@ -282,19 +285,6 @@ college %>%
 ```
 
 
-Table: (\#tab:unnamed-chunk-6)Data summary
-
-|                         |           |
-|:------------------------|:----------|
-|Name                     |Piped data |
-|Number of rows           |777        |
-|Number of columns        |18         |
-|_______________________  |           |
-|Column type frequency:   |           |
-|factor                   |1          |
-|numeric                  |17         |
-|________________________ |           |
-|Group variables          |None       |
 
 
 **Variable type: factor**
@@ -365,7 +355,9 @@ college %>%
 ## 1 FALSE   699
 ## 2 TRUE     78
 ```
+
 *(v):* next looking at producing some histograms for a couple of continuous variables of interest (full and part time undergraduates)
+
 
 ```r
 library(patchwork)
@@ -393,4 +385,208 @@ p / p_zoom +
 
 <img src="02_Statistical_Learning_files/figure-html/unnamed-chunk-10-1.png" width="672" />
 
+*(vi):* Continuing the exploratory data analysis, my key findings were as follows:
 
+-   Private universities appear to have higher graduation rates than public universities.
+
+
+```r
+college %>% 
+  
+  # remove an outlier with impossible graduation rate
+  filter(Grad.Rate <= 100) %>%
+  
+  # produce plot base
+  ggplot(aes(Private, Grad.Rate)) +
+  
+  # add data points as background layer
+  geom_jitter(alpha = 0.5, width = 0.2, colour = "lightblue") +
+  geom_boxplot(fill = NA, outlier.shape = NA,
+               size = 1) +
+  
+  # add labels
+  labs(x = "Private university?",
+       y = "Graduation rate",
+       title = "Private universities appear to have higher graduation rates\n")
+```
+
+<img src="02_Statistical_Learning_files/figure-html/unnamed-chunk-11-1.png" width="672" />
+
+-   More selective universities appear to have higher graduation rates.
+
+
+```r
+college %>% 
+  
+  # remove an outlier with impossible graduation rate
+  filter(Grad.Rate <= 100) %>%
+  
+  # create plot base
+  ggplot(aes(cut_width(Accept / Apps * 100, 
+                       width = 20,
+                       boundary = 0), Grad.Rate)) +
+  
+  # add data points as a background layer
+  geom_jitter(alpha = 0.5, colour = "lightblue", width = 0.2)+
+  
+  # add boxplots
+  geom_boxplot(width = 0.2, alpha = 0) +
+  
+  # format scales for readability
+  scale_x_discrete(labels = c("0-19%", "20-39%", "40-59%", "60-79%", "80-100%")) +
+  scale_y_continuous(labels = scales::percent_format(scale = 1)) +
+  
+  # add labels
+  labs(x = "\nPercentage of applications accepted",
+       y = "Percentage of students graduating\n",
+       title = "More selective universities appear to have higher graduation rates\n")
+```
+
+<img src="02_Statistical_Learning_files/figure-html/unnamed-chunk-12-1.png" width="672" />
+
+**Question 9: The Auto dataset**
+
+*(a):*
+
+-   Quantitative predictors: `mpg`, `cylinders`, `displacement`, `horsepower`, `weight`, `acceleration`, `year` and `origin`.
+
+-   Qualitative predictor: `name.`
+
+*(b):* The range for each quantiative variable is shown in the skim dataframe below (p0 corresponds to the minimum and p100 corresponds to the maximum).
+
+*(c):* The mean and standard deviations for each quantiative variable is shown in the skim dataframe below.
+
+
+```r
+skimr::skim(Auto) %>% 
+  select(-n_missing, -complete_rate)
+```
+
+
+
+
+**Variable type: factor**
+
+|skim_variable |ordered | n_unique|top_counts                     |
+|:-------------|:-------|--------:|:------------------------------|
+|name          |FALSE   |      301|amc: 5, for: 5, toy: 5, amc: 4 |
+
+
+**Variable type: numeric**
+
+|skim_variable |    mean|     sd|   p0|     p25|     p50|     p75|   p100|hist                                     |
+|:-------------|-------:|------:|----:|-------:|-------:|-------:|------:|:----------------------------------------|
+|mpg           |   23.45|   7.81|    9|   17.00|   22.75|   29.00|   46.6|▆▇▆▃▁ |
+|cylinders     |    5.47|   1.71|    3|    4.00|    4.00|    8.00|    8.0|▇▁▃▁▅ |
+|displacement  |  194.41| 104.64|   68|  105.00|  151.00|  275.75|  455.0|▇▂▂▃▁ |
+|horsepower    |  104.47|  38.49|   46|   75.00|   93.50|  126.00|  230.0|▆▇▃▁▁ |
+|weight        | 2977.58| 849.40| 1613| 2225.25| 2803.50| 3614.75| 5140.0|▇▇▅▅▂ |
+|acceleration  |   15.54|   2.76|    8|   13.78|   15.50|   17.02|   24.8|▁▆▇▂▁ |
+|year          |   75.98|   3.68|   70|   73.00|   76.00|   79.00|   82.0|▇▆▇▆▇ |
+|origin        |    1.58|   0.81|    1|    1.00|    1.00|    2.00|    3.0|▇▁▂▁▂ |
+
+*(d):* The means and standard deviations for the quantitative variables for the dataset (minus the 10th and 85th rows) are shown in the skim dataframe below.
+
+
+```r
+autos_omit <- slice(Auto, -10, -85)
+
+skimr::skim(autos_omit) %>% 
+  select(-n_missing, -complete_rate)
+```
+
+
+
+
+**Variable type: factor**
+
+|skim_variable |ordered | n_unique|top_counts                     |
+|:-------------|:-------|--------:|:------------------------------|
+|name          |FALSE   |      299|amc: 5, for: 5, toy: 5, amc: 4 |
+
+
+**Variable type: numeric**
+
+|skim_variable |    mean|     sd|   p0|     p25|    p50|     p75|   p100|hist                                     |
+|:-------------|-------:|------:|----:|-------:|------:|-------:|------:|:----------------------------------------|
+|mpg           |   23.49|   7.80|    9|   17.50|   23.0|   29.00|   46.6|▆▇▆▃▁ |
+|cylinders     |    5.46|   1.70|    3|    4.00|    4.0|    8.00|    8.0|▇▁▃▁▃ |
+|displacement  |  193.51| 104.14|   68|  105.00|  148.5|  262.00|  455.0|▇▂▂▃▁ |
+|horsepower    |  104.07|  38.18|   46|   75.00|   92.5|  125.00|  230.0|▆▇▃▁▁ |
+|weight        | 2972.47| 848.51| 1613| 2223.75| 2797.5| 3608.00| 5140.0|▇▇▅▅▂ |
+|acceleration  |   15.57|   2.74|    8|   13.83|   15.5|   17.08|   24.8|▁▆▇▂▁ |
+|year          |   76.00|   3.68|   70|   73.00|   76.0|   79.00|   82.0|▇▆▇▆▇ |
+|origin        |    1.58|   0.81|    1|    1.00|    1.0|    2.00|    3.0|▇▁▂▁▂ |
+
+*(e and f):* The correlation plot below shows a high degree of correlation between four predictor variables (`cylinders`, `displacement`, `horsepower` and `weight`). There is also a high degree of correlation between these three predictors and the response variable (`mpg`).
+
+
+```r
+GGally::ggcorr(Auto, label = TRUE)
+```
+
+<img src="02_Statistical_Learning_files/figure-html/unnamed-chunk-15-1.png" width="672" />
+
+Scatter plots can help use look at these four predictor variables in more detail.
+
+
+```r
+ggplot(Auto,
+       aes(factor(cylinders), mpg)) +
+  geom_jitter(colour = "lightblue", width = 0.2) +
+  geom_boxplot(width = 0.3, alpha = 0) +
+  labs(x = "\nNumber of Cylinders",
+       y = "Fuel economy (mpg)\n",
+       title = "There is a negative association between the number of cylinders\nand fuel economy\n")
+```
+
+<img src="02_Statistical_Learning_files/figure-html/unnamed-chunk-16-1.png" width="672" />
+
+
+```r
+ggplot(Auto,
+       aes(displacement, mpg)) +
+  geom_point(alpha = 0.5) +
+  geom_smooth(method = "lm", se = FALSE) +
+  scale_x_log10(breaks = c(0, 10, 100, 200, 400)) +
+  expand_limits(x = 0, y = 0) +
+  labs(x = "\nEngine displacement (on a log transformed scale)\n",
+       y = "Fuel economy (mpg)\n",
+       title = "There is a negative association between the\nlogarithm of engine displacement and fuel economy\n")
+```
+
+<img src="02_Statistical_Learning_files/figure-html/unnamed-chunk-17-1.png" width="672" />
+
+
+```r
+ggplot(Auto,
+       aes(horsepower, mpg)) +
+  geom_point(alpha = 0.5) +
+  geom_smooth(method = "lm", se = FALSE) +
+  scale_x_log10() +
+  expand_limits(x = 0, y = 0) +
+  
+  labs(x = "Horsepower (on a log scale)",
+       y = "Fuel Economy (mpg)",
+       title = "There is a negative association between the\nlogarithm of horsepower and fuel economy\n")
+```
+
+<img src="02_Statistical_Learning_files/figure-html/unnamed-chunk-18-1.png" width="672" />
+
+
+```r
+ggplot(Auto,
+       aes(weight, mpg)) +
+  geom_point(alpha = 0.5) +
+  geom_smooth(method = "lm", se = FALSE) +
+  scale_x_log10() +
+  labs(x = "Weight in kgs (on a log scale)",
+       y = "Fuel economy (mpg)",
+       title = "There is a negative association between the\nlogarithm of weight and fuel economy\n")
+```
+
+<img src="02_Statistical_Learning_files/figure-html/unnamed-chunk-19-1.png" width="672" />
+
+Each of the four variables plotted above could be useful predictors of fuel economy. Additionally, the correlation plot also identified two other variables with reasonably strong correlations with fuel economy: `year` and `origin`. If I was going to proceed to develop a model using this data, it would be worth looking at `year` and `origin` in more detail.
+
+**Question 8: The Boston Housing dataset.**
