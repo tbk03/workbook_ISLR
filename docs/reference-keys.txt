@@ -2,3 +2,6 @@ introduction
 statistical-learning
 conceptual-exercises
 applied-exercises
+linear-regression
+conceptual-questions
+applied-questions

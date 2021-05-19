@@ -1,0 +1,64 @@
+# Linear Regression
+
+```{r}
+library(tidyverse)
+```
+
+```{r, include = FALSE}
+# global settings for producing html output
+knitr::opts_chunk$set(warning = FALSE,                  # remove for readability
+                      message = FALSE,                  # remove for readability
+                      skimr_include_summary = FALSE,    # remove for readability
+                      cache = TRUE)   # for inclusion during coding
+
+# set default theme for plots
+theme_set(theme_minimal())
+```
+
+## Conceptual questions
+
+**Question 1: null hypotheses for p-values in Table 3.4**
+
+Each of the four p-values in table 3.4 relate to the null hypotheses that each corresponding coefficient is zero. Based on these p-values we can conclude that there is strong evidence that the `Intercept`, and the `TV` and `Radio` predictors are non zero. That is the null hypotheses corresponding to each of these coefficients can be rejected. Or in other words, the `TV` and `Radio` variables can be helpful in predicting `Sales`. We cannot reject the null hypothesis associated the `Newspaper` variable, as the corresponding p-value is greater than 1 minus the confidence level (assumed to be 95% in this case). In other words there is not strong evidence that `Newspaper` (in conjuction with the other predictors) can be helpful in predicting `Sales`.
+
+**Question 2: differences between KNN classifier and KNN regression methods**
+
+The key differences between the KNN classifier and KNN regression methods can be summarized as follows:
+
+-   For the KNN classifier the predicted value is a class (i.e. a qualitative value) whereas for the KNN regression the predicted value is numerical (i.e. a continuous numerical value).
+
+-   When using the classifier method, the predicted class is determined by considering the number of K nearest neighbors which fall in each class. The class with the largest number of K nearest neighbors is taken as the prediction. Whereas, when using the regression method, the predicted class is determined by averaging the values of the response variable for the K nearest neighbors.
+
+**Question 3: interpreting coefficients**
+
+*(a):* It is likely that (ii) is correct. The coefficient for the main effect gender is positive (B~3~ is 35), so for a fixed value of GPA and IQ we would expect females to earn more. There is an interaction term, between GPA and gender but this is not relevant because we are assuming GPA is a fixed value.
+
+*(b)*:
+
+```{r}
+gender <- 1
+IQ <- 110
+GPA <- 4.0
+
+salary <- 50 + (20 * GPA) + (0.07 * IQ) + (35 * gender) + (0.01 * GPA * IQ) + (-10 * GPA * gender)
+
+salary
+```
+
+*(c)*: True - given the GPA/IQ coefficient is very small it is unlikely that it's p-value would show statistical significant, because assume the standard error of the coefficient is non-zero the confidence interval for the coefficient will encompass zero.
+
+**Question 4: linear versus cubic regression**
+
+*(a):* For the training set, I don't think there is enough information to be confident about the question of if the RSS would be lower for the linear or cubic regression. It would depend on if the noise in the data, on top of the underlying linear relationship, created a resemblance to a cubic relationship between the predictor and response variable.
+
+*(b):* For the test set, I would expect the linear regression to have a lower RSS than the cubic regression. This is because cubic regression (as the more flexible method) would have been more likely to over fit the data.
+
+*(c):* If we assume the underlying relationship is non linear, again I think there is not enough information to be confident about the question of if the RSS would be lower for the linear or cubic regression. It would depend on whether the assumed functional form of the linear and cubic models is closer to the true underlying relationship.
+
+*(d):* Again for the test, it would depend on whether the assumed functional form of the linear and cubic models is closer to the true underlying relationship.
+
+**Question 5**
+
+Answer in notebook.
+
+## Applied questions

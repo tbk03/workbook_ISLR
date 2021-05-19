@@ -1,7 +1,7 @@
 --- 
 title: "Workbook: An Introduction to Statistical Learning"
 author: "Chris J. Martin"
-date: "2021-04-23"
+date: "2021-05-19"
 site: bookdown::bookdown_site
 output: bookdown::gitbook
 documentclass: book

@@ -1,0 +1,25 @@
+---
+title: "Regression template"
+author: "Dr. Chris Martin"
+date: "The Date"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+```
+
+## Questions
+
+-   Is at least one of the predictors useful in predicting the response? *F-statistic.*
+
+-   Do all the predictors help to explain Y, or is it a subset of predictors that help to explain Y? *Compare models with different subsets. Metric include AIC, BIC, adjusted R^2^* and Mallow's $$C_{p}$$.
+
+-   How well does the model fit the data? *RSE and R^2^* *(training data)*
+
+-   Given a set of predictor values, what response value should we predict? And, how accurate is our prediction? *RSE and R^2^* *(test data)*
+
+## Process
+
+![](Linear%20regression%20process.png)
