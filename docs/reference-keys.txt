@@ -3,5 +3,6 @@ statistical-learning
 conceptual-exercises
 applied-exercises
 linear-regression
+lab
 conceptual-questions
 applied-questions

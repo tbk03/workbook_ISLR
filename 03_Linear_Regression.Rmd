@@ -1,6 +1,9 @@
 # Linear Regression
 
 ```{r}
+library(MASS) # For Boston data set
+library(tidymodels)
+library(ISLR)
 library(tidyverse)
 ```
 
@@ -13,6 +16,179 @@ knitr::opts_chunk$set(warning = FALSE,                  # remove for readability
 
 # set default theme for plots
 theme_set(theme_minimal())
+```
+
+## Lab
+
+[Based on ISLR tidymodels Labs](https://emilhvitfeldt.github.io/ISLR-tidymodels-labs/linear-regression.html)
+
+```{r}
+```
+
+A simple linear regression model
+
+```{r}
+# specify the model
+lm_spec <- parsnip::linear_reg() %>% 
+  parsnip::set_mode("regression") %>% 
+  parsnip::set_engine("stan")
+
+lm_spec
+
+# fit the model
+lm_fit <- lm_spec %>% 
+  parsnip::fit(medv ~ lstat, data = Boston)
+
+lm_fit
+
+# examine the fit
+lm_fit$fit
+
+# in more details
+lm_fit %>% 
+  purrr::pluck("fit") %>% 
+  summary()
+
+# get tidy output from model fit
+broom.mixed::tidy(lm_fit)
+broom.mixed::glance(lm_fit)
+
+broom.mixed::tidy(lm_fit$fit)
+broom.mixed::glance(lm_fit$fit)
+
+# predict medv for the training set
+stats::predict(lm_fit, new_data = Boston, type = "conf_int") %>% 
+  dplyr::bind_cols(Boston) %>% 
+  dplyr::select(medv, tidyr::starts_with(".pred"))
+
+# predict and compare to actual is less code
+broom::augment(lm_fit, new_data = Boston) %>% 
+  dplyr::select(medv, `.pred`)
+```
+
+A multiple linear regression model.
+
+```{r}
+# specify the model
+lm_spec_2 <- parsnip::linear_reg() %>% 
+  parsnip::set_mode("regression") %>% 
+  parsnip::set_engine("lm")
+
+# fit the model
+lm_fit_2 <- lm_spec_2 %>% 
+  parsnip::fit(medv ~ lstat + age,
+               data = Boston)
+
+# look at the output
+summary(lm_fit_2$fit)
+broom::tidy(lm_fit_2)
+
+broom::augment(lm_fit_2, new_data = Boston) %>% 
+  dplyr::select(medv, .pred)
+```
+
+A more complicated linear regression model.
+
+```{r}
+# fit the model using all available varaibles as predictors
+lm_fit_3 <- lm_spec_2 %>% 
+  fit(medv ~ ., Boston)
+
+# look at modle fit output
+tidy(lm_fit_3) %>% 
+  filter(p.value < 0.05)
+```
+
+Interaction terms in formula
+
+```{r}
+# fit a model with an interaction specfied in the formula
+lm_fit_4 <- lm_spec_2 %>% 
+  parsnip::fit(medv ~ lstat * age, data = Boston)
+
+# look at the model fit output in a tidy form
+broom::tidy(lm_fit_4)
+```
+
+Interactions terms using `recipes`.
+
+```{r}
+# specify the interaction using recipes
+rec_spec <- recipes::recipe(medv ~ lstat + age, data = Boston) %>% 
+  recipes::step_interact(terms = ~ lstat:age)
+
+# create a modelling workflow
+lm_wf <- workflows::workflow() %>% 
+  add_model(lm_spec) %>% 
+  add_recipe(rec_spec)
+
+# run the workflow
+lm_wf_out <- lm_wf %>% 
+  parsnip::fit(Boston)
+
+tidy(lm_wf_out)
+glance(lm_wf_out)
+
+# get the actual model fit
+lm_wf_out$fit$fit$fit
+```
+
+Applying non-linear transformations to predictors
+
+```{r}
+# create a new recipe
+rec_spec_pow2 <- recipes::recipe(medv ~ lstat, data = Boston) %>% 
+  step_mutate(lstat = lstat ^ 2)
+
+# create a new workflow including the new recipe
+lm_wf_pow2 <- workflows::workflow() %>% 
+  add_model(lm_spec) %>% 
+  add_recipe(rec_spec_pow2)
+
+# fit the workflow
+lm_wf_pow2 %>% 
+  fit(data = Boston)
+```
+
+Using predefined steps from `recipes`.
+
+```{r}
+# create different recipe
+rec_spec_log <- recipes::recipe(medv ~ lstat, data = Boston) %>% 
+  step_log(lstat)
+
+# create a workflow incorporating this recipe
+lm_wf_log <- workflows::workflow() %>% 
+  add_model(lm_spec) %>% 
+  add_recipe(rec_spec_log)
+
+# run the workflow
+lm_wf_log %>% 
+  fit(data = Boston)
+```
+
+Dealing with qualitative predictors. Many models convert qualitative predictors to dummy variables automatically, so qualitative predictors can just be added the formula. But if not, dummy variables can be created in the recipe.
+
+```{r}
+# look at the dataset used in the lab 
+Carseats
+
+# create a recipe
+rec_spec <- recipes::recipe(Sales ~ ., data = Carseats) %>% 
+  step_dummy(all_nominal()) %>% 
+  step_interact(~ Income:Advertising + Price:Age)
+
+# create a workflow
+carseats_wf <- workflows::workflow() %>% 
+  add_model(lm_spec_2) %>% 
+  add_recipe(rec_spec)
+
+# run the workflow
+wf_out <- carseats_wf %>% 
+  fit(Carseats)
+
+tidy(wf_out) #%>% 
+ #kableExtra::kable()
 ```
 
 ## Conceptual questions

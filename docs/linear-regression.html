@@ -24,7 +24,7 @@
 <meta name="author" content="Chris J. Martin" />
 
 
-<meta name="date" content="2021-05-19" />
+<meta name="date" content="2021-06-03" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -143,8 +143,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="3" data-path="linear-regression.html"><a href="linear-regression.html"><i class="fa fa-check"></i><b>3</b> Linear Regression</a>
 <ul>
-<li class="chapter" data-level="3.1" data-path="linear-regression.html"><a href="linear-regression.html#conceptual-questions"><i class="fa fa-check"></i><b>3.1</b> Conceptual questions</a></li>
-<li class="chapter" data-level="3.2" data-path="linear-regression.html"><a href="linear-regression.html#applied-questions"><i class="fa fa-check"></i><b>3.2</b> Applied questions</a></li>
+<li class="chapter" data-level="3.1" data-path="linear-regression.html"><a href="linear-regression.html#lab"><i class="fa fa-check"></i><b>3.1</b> Lab</a></li>
+<li class="chapter" data-level="3.2" data-path="linear-regression.html"><a href="linear-regression.html#conceptual-questions"><i class="fa fa-check"></i><b>3.2</b> Conceptual questions</a></li>
+<li class="chapter" data-level="3.3" data-path="linear-regression.html"><a href="linear-regression.html#applied-questions"><i class="fa fa-check"></i><b>3.3</b> Applied questions</a></li>
 </ul></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
@@ -168,23 +169,2248 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="linear-regression" class="section level1" number="3">
 <h1><span class="header-section-number">Chapter 3</span> Linear Regression</h1>
-<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="linear-regression.html#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code></pre></div>
-<pre><code>## Warning: package &#39;tidyverse&#39; was built under R version 4.0.5</code></pre>
-<pre><code>## -- Attaching packages --------------------------------------- tidyverse 1.3.1 --</code></pre>
-<pre><code>## v ggplot2 3.3.3     v purrr   0.3.4
-## v tibble  3.1.0     v dplyr   1.0.5
-## v tidyr   1.1.3     v stringr 1.4.0
-## v readr   1.4.0     v forcats 0.5.1</code></pre>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="linear-regression.html#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(MASS) <span class="co"># For Boston data set</span></span></code></pre></div>
+<pre><code>## Warning: package &#39;MASS&#39; was built under R version 4.0.4</code></pre>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="linear-regression.html#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidymodels)</span></code></pre></div>
+<pre><code>## -- Attaching packages -------------------------------------- tidymodels 0.1.2 --</code></pre>
+<pre><code>## v broom     0.7.6      v recipes   0.1.15
+## v dials     0.0.9      v rsample   0.0.9 
+## v dplyr     1.0.5      v tibble    3.1.0 
+## v ggplot2   3.3.3      v tidyr     1.1.3 
+## v infer     0.5.4      v tune      0.1.3 
+## v modeldata 0.1.0      v workflows 0.2.2 
+## v parsnip   0.1.5      v yardstick 0.0.7 
+## v purrr     0.3.4</code></pre>
+<pre><code>## Warning: package &#39;broom&#39; was built under R version 4.0.5</code></pre>
+<pre><code>## Warning: package &#39;dplyr&#39; was built under R version 4.0.4</code></pre>
 <pre><code>## Warning: package &#39;ggplot2&#39; was built under R version 4.0.4</code></pre>
+<pre><code>## Warning: package &#39;infer&#39; was built under R version 4.0.4</code></pre>
+<pre><code>## Warning: package &#39;parsnip&#39; was built under R version 4.0.4</code></pre>
+<pre><code>## Warning: package &#39;rsample&#39; was built under R version 4.0.4</code></pre>
 <pre><code>## Warning: package &#39;tibble&#39; was built under R version 4.0.5</code></pre>
 <pre><code>## Warning: package &#39;tidyr&#39; was built under R version 4.0.4</code></pre>
-<pre><code>## Warning: package &#39;dplyr&#39; was built under R version 4.0.4</code></pre>
+<pre><code>## Warning: package &#39;tune&#39; was built under R version 4.0.4</code></pre>
+<pre><code>## Warning: package &#39;workflows&#39; was built under R version 4.0.4</code></pre>
+<pre><code>## -- Conflicts ----------------------------------------- tidymodels_conflicts() --
+## x purrr::discard() masks scales::discard()
+## x dplyr::filter()  masks stats::filter()
+## x dplyr::lag()     masks stats::lag()
+## x dplyr::select()  masks MASS::select()
+## x recipes::step()  masks stats::step()</code></pre>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="linear-regression.html#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ISLR)</span></code></pre></div>
+<pre><code>## Warning: package &#39;ISLR&#39; was built under R version 4.0.5</code></pre>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="linear-regression.html#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code></pre></div>
+<pre><code>## Warning: package &#39;tidyverse&#39; was built under R version 4.0.5</code></pre>
+<pre><code>## -- Attaching packages --------------------------------------- tidyverse 1.3.1 --</code></pre>
+<pre><code>## v readr   1.4.0     v forcats 0.5.1
+## v stringr 1.4.0</code></pre>
 <pre><code>## Warning: package &#39;forcats&#39; was built under R version 4.0.4</code></pre>
 <pre><code>## -- Conflicts ------------------------------------------ tidyverse_conflicts() --
-## x dplyr::filter() masks stats::filter()
-## x dplyr::lag()    masks stats::lag()</code></pre>
-<div id="conceptual-questions" class="section level2" number="3.1">
-<h2><span class="header-section-number">3.1</span> Conceptual questions</h2>
+## x readr::col_factor() masks scales::col_factor()
+## x purrr::discard()    masks scales::discard()
+## x dplyr::filter()     masks stats::filter()
+## x stringr::fixed()    masks recipes::fixed()
+## x dplyr::lag()        masks stats::lag()
+## x dplyr::select()     masks MASS::select()
+## x readr::spec()       masks yardstick::spec()</code></pre>
+<div id="lab" class="section level2" number="3.1">
+<h2><span class="header-section-number">3.1</span> Lab</h2>
+<p><a href="https://emilhvitfeldt.github.io/ISLR-tidymodels-labs/linear-regression.html">Based on ISLR tidymodels Labs</a></p>
+<p>A simple linear regression model</p>
+<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb53-1"><a href="linear-regression.html#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="co"># specify the model</span></span>
+<span id="cb53-2"><a href="linear-regression.html#cb53-2" aria-hidden="true" tabindex="-1"></a>lm_spec <span class="ot">&lt;-</span> parsnip<span class="sc">::</span><span class="fu">linear_reg</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb53-3"><a href="linear-regression.html#cb53-3" aria-hidden="true" tabindex="-1"></a>  parsnip<span class="sc">::</span><span class="fu">set_mode</span>(<span class="st">&quot;regression&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb53-4"><a href="linear-regression.html#cb53-4" aria-hidden="true" tabindex="-1"></a>  parsnip<span class="sc">::</span><span class="fu">set_engine</span>(<span class="st">&quot;stan&quot;</span>)</span>
+<span id="cb53-5"><a href="linear-regression.html#cb53-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-6"><a href="linear-regression.html#cb53-6" aria-hidden="true" tabindex="-1"></a>lm_spec</span></code></pre></div>
+<pre><code>## Linear Regression Model Specification (regression)
+## 
+## Computational engine: stan</code></pre>
+<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb55-1"><a href="linear-regression.html#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="co"># fit the model</span></span>
+<span id="cb55-2"><a href="linear-regression.html#cb55-2" aria-hidden="true" tabindex="-1"></a>lm_fit <span class="ot">&lt;-</span> lm_spec <span class="sc">%&gt;%</span> </span>
+<span id="cb55-3"><a href="linear-regression.html#cb55-3" aria-hidden="true" tabindex="-1"></a>  parsnip<span class="sc">::</span><span class="fu">fit</span>(medv <span class="sc">~</span> lstat, <span class="at">data =</span> Boston)</span>
+<span id="cb55-4"><a href="linear-regression.html#cb55-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb55-5"><a href="linear-regression.html#cb55-5" aria-hidden="true" tabindex="-1"></a>lm_fit</span></code></pre></div>
+<pre><code>## parsnip model object
+## 
+## Fit time:  620ms 
+## stan_glm
+##  family:       gaussian [identity]
+##  formula:      medv ~ lstat
+##  observations: 506
+##  predictors:   2
+## ------
+##             Median MAD_SD
+## (Intercept) 34.6    0.6  
+## lstat       -0.9    0.0  
+## 
+## Auxiliary parameter(s):
+##       Median MAD_SD
+## sigma 6.2    0.2   
+## 
+## ------
+## * For help interpreting the printed output see ?print.stanreg
+## * For info on the priors used see ?prior_summary.stanreg</code></pre>
+<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb57-1"><a href="linear-regression.html#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="co"># examine the fit</span></span>
+<span id="cb57-2"><a href="linear-regression.html#cb57-2" aria-hidden="true" tabindex="-1"></a>lm_fit<span class="sc">$</span>fit</span></code></pre></div>
+<pre><code>## stan_glm
+##  family:       gaussian [identity]
+##  formula:      medv ~ lstat
+##  observations: 506
+##  predictors:   2
+## ------
+##             Median MAD_SD
+## (Intercept) 34.6    0.6  
+## lstat       -0.9    0.0  
+## 
+## Auxiliary parameter(s):
+##       Median MAD_SD
+## sigma 6.2    0.2   
+## 
+## ------
+## * For help interpreting the printed output see ?print.stanreg
+## * For info on the priors used see ?prior_summary.stanreg</code></pre>
+<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb59-1"><a href="linear-regression.html#cb59-1" aria-hidden="true" tabindex="-1"></a><span class="co"># in more details</span></span>
+<span id="cb59-2"><a href="linear-regression.html#cb59-2" aria-hidden="true" tabindex="-1"></a>lm_fit <span class="sc">%&gt;%</span> </span>
+<span id="cb59-3"><a href="linear-regression.html#cb59-3" aria-hidden="true" tabindex="-1"></a>  purrr<span class="sc">::</span><span class="fu">pluck</span>(<span class="st">&quot;fit&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb59-4"><a href="linear-regression.html#cb59-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summary</span>()</span></code></pre></div>
+<pre><code>## 
+## Model Info:
+##  function:     stan_glm
+##  family:       gaussian [identity]
+##  formula:      medv ~ lstat
+##  algorithm:    sampling
+##  sample:       4000 (posterior sample size)
+##  priors:       see help(&#39;prior_summary&#39;)
+##  observations: 506
+##  predictors:   2
+## 
+## Estimates:
+##               mean   sd   10%   50%   90%
+## (Intercept) 34.6    0.6 33.8  34.6  35.3 
+## lstat       -0.9    0.0 -1.0  -0.9  -0.9 
+## sigma        6.2    0.2  6.0   6.2   6.5 
+## 
+## Fit Diagnostics:
+##            mean   sd   10%   50%   90%
+## mean_PPD 22.5    0.4 22.0  22.6  23.1 
+## 
+## The mean_ppd is the sample average posterior predictive distribution of the outcome variable (for details see help(&#39;summary.stanreg&#39;)).
+## 
+## MCMC diagnostics
+##               mcse Rhat n_eff
+## (Intercept)   0.0  1.0  3655 
+## lstat         0.0  1.0  3698 
+## sigma         0.0  1.0  3294 
+## mean_PPD      0.0  1.0  3462 
+## log-posterior 0.0  1.0  1658 
+## 
+## For each parameter, mcse is Monte Carlo standard error, n_eff is a crude measure of effective sample size, and Rhat is the potential scale reduction factor on split chains (at convergence Rhat=1).</code></pre>
+<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb61-1"><a href="linear-regression.html#cb61-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get tidy output from model fit</span></span>
+<span id="cb61-2"><a href="linear-regression.html#cb61-2" aria-hidden="true" tabindex="-1"></a>broom.mixed<span class="sc">::</span><span class="fu">tidy</span>(lm_fit)</span></code></pre></div>
+<pre><code>## # A tibble: 2 x 3
+##   term        estimate std.error
+##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;
+## 1 (Intercept)   34.6      0.560 
+## 2 lstat         -0.949    0.0381</code></pre>
+<div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb63-1"><a href="linear-regression.html#cb63-1" aria-hidden="true" tabindex="-1"></a>broom.mixed<span class="sc">::</span><span class="fu">glance</span>(lm_fit)</span></code></pre></div>
+<pre><code>## # A tibble: 1 x 4
+##   algorithm   pss  nobs sigma
+##   &lt;chr&gt;     &lt;dbl&gt; &lt;int&gt; &lt;dbl&gt;
+## 1 sampling   4000   506  6.22</code></pre>
+<div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb65-1"><a href="linear-regression.html#cb65-1" aria-hidden="true" tabindex="-1"></a>broom.mixed<span class="sc">::</span><span class="fu">tidy</span>(lm_fit<span class="sc">$</span>fit)</span></code></pre></div>
+<pre><code>## # A tibble: 2 x 3
+##   term        estimate std.error
+##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;
+## 1 (Intercept)   34.6      0.560 
+## 2 lstat         -0.949    0.0381</code></pre>
+<div class="sourceCode" id="cb67"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb67-1"><a href="linear-regression.html#cb67-1" aria-hidden="true" tabindex="-1"></a>broom.mixed<span class="sc">::</span><span class="fu">glance</span>(lm_fit<span class="sc">$</span>fit)</span></code></pre></div>
+<pre><code>## # A tibble: 1 x 4
+##   algorithm   pss  nobs sigma
+##   &lt;chr&gt;     &lt;dbl&gt; &lt;int&gt; &lt;dbl&gt;
+## 1 sampling   4000   506  6.22</code></pre>
+<div class="sourceCode" id="cb69"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb69-1"><a href="linear-regression.html#cb69-1" aria-hidden="true" tabindex="-1"></a><span class="co"># predict medv for the training set</span></span>
+<span id="cb69-2"><a href="linear-regression.html#cb69-2" aria-hidden="true" tabindex="-1"></a>stats<span class="sc">::</span><span class="fu">predict</span>(lm_fit, <span class="at">new_data =</span> Boston, <span class="at">type =</span> <span class="st">&quot;conf_int&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb69-3"><a href="linear-regression.html#cb69-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">bind_cols</span>(Boston) <span class="sc">%&gt;%</span> </span>
+<span id="cb69-4"><a href="linear-regression.html#cb69-4" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(medv, tidyr<span class="sc">::</span><span class="fu">starts_with</span>(<span class="st">&quot;.pred&quot;</span>))</span></code></pre></div>
+<pre><code>## # A tibble: 506 x 3
+##     medv .pred_lower .pred_upper
+##    &lt;dbl&gt;       &lt;dbl&gt;       &lt;dbl&gt;
+##  1  24         29.0        30.6 
+##  2  21.6       25.3        26.5 
+##  3  34.7       29.9        31.6 
+##  4  33.4       30.9        32.7 
+##  5  36.2       28.7        30.3 
+##  6  28.7       28.8        30.4 
+##  7  22.9       22.2        23.3 
+##  8  27.1       15.6        17.1 
+##  9  16.5        4.74        7.51
+## 10  18.9       17.7        19.0 
+## # ... with 496 more rows</code></pre>
+<div class="sourceCode" id="cb71"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb71-1"><a href="linear-regression.html#cb71-1" aria-hidden="true" tabindex="-1"></a><span class="co"># predict and compare to actual is less code</span></span>
+<span id="cb71-2"><a href="linear-regression.html#cb71-2" aria-hidden="true" tabindex="-1"></a>broom<span class="sc">::</span><span class="fu">augment</span>(lm_fit, <span class="at">new_data =</span> Boston) <span class="sc">%&gt;%</span> </span>
+<span id="cb71-3"><a href="linear-regression.html#cb71-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(medv, <span class="st">`</span><span class="at">.pred</span><span class="st">`</span>)</span></code></pre></div>
+<pre><code>##     medv      .pred
+## 1   24.0 29.8276951
+## 2   21.6 25.8793218
+## 3   34.7 30.7293669
+## 4   33.4 31.7639166
+## 5   36.2 29.4955002
+## 6   28.7 29.6093956
+## 7   22.9 22.7566900
+## 8   27.1 16.3785485
+## 9   16.5  6.1469465
+## 10  18.9 18.3242613
+## 11  15.0 15.1446818
+## 12  18.9 21.9594223
+## 13  21.7 19.6435495
+## 14  20.4 26.7145546
+## 15  18.2 24.8162982
+## 16  19.9 26.5152376
+## 17  23.1 28.3090899
+## 18  17.5 20.6306428
+## 19  20.2 23.4590448
+## 20  18.2 23.8481874
+## 21  13.6 14.6036787
+## 22  19.6 21.4279105
+## 23  15.2 16.7866736
+## 24  14.5 15.6856849
+## 25  15.6 19.0835638
+## 26  13.9 18.8842469
+## 27  16.6 20.4977649
+## 28  14.8 18.1534182
+## 29  18.4 22.4055125
+## 30  21.0 23.1837977
+## 31  12.7 13.1040562
+## 32  14.5 22.1777218
+## 33  13.2  8.2540111
+## 34  13.1 17.1378510
+## 35  13.5 15.2490859
+## 36  18.9 25.3667925
+## 37  20.0 23.7248007
+## 38  21.0 26.2304992
+## 39  24.7 24.9396848
+## 40  30.8 30.4541197
+## 41  34.9 32.6750797
+## 42  26.6 29.9605730
+## 43  25.3 29.0399187
+## 44  24.7 27.4928397
+## 45  21.2 25.4901792
+## 46  19.3 24.8637546
+## 47  20.0 21.1241895
+## 48  16.6 16.7107433
+## 49  14.4  5.3117137
+## 50  19.4 19.1784767
+## 51  19.7 21.7885792
+## 52  20.5 25.6040746
+## 53  25.0 29.5429566
+## 54  23.4 26.5532028
+## 55  18.9 20.5072561
+## 56  35.4 29.9890469
+## 57  24.7 29.0778838
+## 58  31.6 30.8052971
+## 59  23.3 28.0433340
+## 60  19.6 25.8033915
+## 61  18.7 22.0733177
+## 62  16.0 20.8489423
+## 63  22.2 28.1667207
+## 64  25.0 25.5376356
+## 65  33.0 26.9138715
+## 66  23.5 30.1219248
+## 67  19.4 24.8352807
+## 68  22.0 26.8664151
+## 69  17.4 22.1302654
+## 70  20.9 26.2115166
+## 71  24.2 28.1762120
+## 72  21.7 25.1769669
+## 73  22.8 29.3151658
+## 74  23.4 27.3979269
+## 75  24.1 28.1192643
+## 76  21.4 26.0691474
+## 77  20.0 23.1932889
+## 78  20.8 24.8068069
+## 79  21.2 22.8421115
+## 80  20.3 25.9172869
+## 81  28.0 29.5334653
+## 82  23.9 27.7016479
+## 83  24.8 28.1762120
+## 84  22.9 27.4264007
+## 85  23.9 25.4237402
+## 86  26.6 28.3565464
+## 87  22.5 22.3485648
+## 88  22.2 26.5437115
+## 89  23.6 29.3341484
+## 90  28.7 29.1443228
+## 91  22.6 26.1925341
+## 92  22.0 26.7715023
+## 93  22.9 26.8094674
+## 94  25.0 28.6602674
+## 95  20.6 24.5030859
+## 96  28.4 28.2426510
+## 97  21.4 23.7912397
+## 98  38.7 30.5585238
+## 99  43.8 31.1659658
+## 100 33.2 28.6792499
+## 101 27.5 25.6135659
+## 102 26.5 27.2745402
+## 103 18.6 24.4651207
+## 104 19.3 21.7980705
+## 105 20.1 22.8516028
+## 106 19.5 18.9222120
+## 107 19.5 16.8436213
+## 108 20.4 21.1811372
+## 109 19.8 22.9085505
+## 110 19.4 19.7954100
+## 111 21.7 22.2156869
+## 112 22.8 24.9112110
+## 113 18.8 19.1689854
+## 114 18.7 18.3337526
+## 115 18.5 24.6359638
+## 116 18.3 19.5960931
+## 117 21.2 23.1268500
+## 118 19.2 24.7783330
+## 119 20.4 19.9662531
+## 120 19.3 21.6367187
+## 121 22.0 20.9153813
+## 122 20.3 21.0102941
+## 123 20.5 17.5364849
+## 124 17.3 10.4370059
+## 125 18.8 17.8686797
+## 126 21.4 20.4977649
+## 127 15.7  8.6811188
+## 128 16.2 18.2388397
+## 129 18.0 19.9472705
+## 130 14.3 17.1473423
+## 131 19.2 22.5953382
+## 132 19.6 22.9180418
+## 133 23.0 24.0000479
+## 134 18.4 20.2889567
+## 135 15.6 18.1249444
+## 136 18.1 18.4571392
+## 137 17.4 18.5140869
+## 138 17.1 20.7065731
+## 139 13.3 14.3189403
+## 140 17.8 17.0334469
+## 141 14.0 11.6234162
+## 142 14.4  1.8948521
+## 143 13.4  9.0987352
+## 144 15.6  9.4783865
+## 145 11.8  6.7543885
+## 146 13.8  8.1685895
+## 147 15.6 18.7513690
+## 148 14.6  6.5265978
+## 149 17.8  7.6750429
+## 150 15.4 14.1955536
+## 151 21.5 21.1716459
+## 152 19.6 21.9499310
+## 153 15.3 23.0509197
+## 154 19.4 19.5676192
+## 155 17.0 20.2035351
+## 156 15.6 20.2984479
+## 157 13.1 19.2354244
+## 158 41.3 30.1978551
+## 159 24.3 28.4514592
+## 160 23.3 27.5402961
+## 161 27.0 29.3341484
+## 162 50.0 32.9123617
+## 163 50.0 32.7320274
+## 164 50.0 31.4032479
+## 165 22.7 23.5065013
+## 166 25.0 25.2434059
+## 167 50.0 31.0425792
+## 168 23.8 23.0319372
+## 169 23.8 24.0190305
+## 170 22.3 23.8102223
+## 171 17.4 20.8584336
+## 172 19.1 23.1363413
+## 173 23.1 20.6116602
+## 174 23.6 25.9742346
+## 175 22.6 25.4047577
+## 176 29.4 29.4955002
+## 177 23.2 24.9586674
+## 178 24.6 28.5843371
+## 179 29.9 27.9863864
+## 180 37.2 29.7707474
+## 181 39.8 27.3789443
+## 182 36.2 25.5850920
+## 183 37.9 29.9795556
+## 184 32.5 29.1633053
+## 185 26.4 21.2855413
+## 186 29.6 22.0733177
+## 187 50.0 30.3307330
+## 188 32.0 28.2141771
+## 189 29.8 30.2263289
+## 190 34.9 29.4385525
+## 191 37.0 29.7137997
+## 192 30.5 30.1029422
+## 193 36.4 31.8303556
+## 194 31.1 29.7802387
+## 195 29.1 30.3971720
+## 196 50.0 31.7354427
+## 197 33.3 30.6819104
+## 198 30.3 26.3823597
+## 199 34.6 28.2711248
+## 200 34.9 30.2263289
+## 201 32.9 30.3307330
+## 202 24.1 27.5023310
+## 203 42.3 31.6025648
+## 204 48.5 30.9381751
+## 205 50.0 31.8208643
+## 206 22.6 24.2373300
+## 207 24.4 24.1424171
+## 208 22.5 17.4130982
+## 209 24.4 20.6401341
+## 210 20.0 12.6389834
+## 211 21.7 18.1629095
+## 212 19.3 11.7942593
+## 213 22.4 19.3398285
+## 214 28.1 25.6515310
+## 215 23.7  6.5076152
+## 216 25.0 25.5661094
+## 217 23.3 21.7316315
+## 218 28.7 25.3573012
+## 219 21.5 17.5459762
+## 220 23.0 24.5885074
+## 221 26.7 25.3383187
+## 222 21.7 14.1860623
+## 223 27.5 25.1295105
+## 224 30.1 27.3409792
+## 225 44.8 30.6249628
+## 226 50.0 30.1598899
+## 227 37.6 31.5835822
+## 228 31.6 28.5178981
+## 229 46.7 30.8337710
+## 230 31.5 30.9856315
+## 231 24.3 23.4970100
+## 232 31.7 29.5714304
+## 233 41.7 32.2100068
+## 234 48.3 30.8052971
+## 235 29.0 26.9138715
+## 236 24.0 24.2278387
+## 237 25.1 25.4996705
+## 238 31.5 30.0649771
+## 239 23.7 28.5178981
+## 240 23.3 27.5592787
+## 241 22.0 23.7532746
+## 242 20.1 22.7851638
+## 243 22.2 23.9051351
+## 244 23.7 29.6283781
+## 245 17.6 22.6902510
+## 246 18.5 17.0334469
+## 247 24.3 25.8603392
+## 248 20.5 24.9207023
+## 249 24.5 25.5186530
+## 250 26.2 28.3280725
+## 251 24.4 28.9544971
+## 252 24.8 31.1469833
+## 253 29.6 31.2039310
+## 254 42.8 31.1944397
+## 255 21.9 28.3185812
+## 256 20.9 25.7749176
+## 257 44.0 31.6025648
+## 258 50.0 29.6948171
+## 259 36.0 27.1606448
+## 260 30.1 28.0053689
+## 261 33.8 25.4522141
+## 262 43.1 27.6636828
+## 263 48.8 28.9450058
+## 264 31.0 23.8766612
+## 265 36.5 26.8664151
+## 266 22.8 24.6359638
+## 267 30.7 20.5167474
+## 268 50.0 27.4928397
+## 269 43.5 31.5551084
+## 270 20.7 21.5987536
+## 271 21.1 22.2156869
+## 272 25.2 28.2995987
+## 273 24.4 27.2175925
+## 274 35.2 28.3090899
+## 275 32.4 31.2039310
+## 276 32.0 31.7259515
+## 277 33.2 28.8121279
+## 278 33.1 30.6059802
+## 279 29.1 27.7301217
+## 280 35.1 29.9510817
+## 281 45.4 30.9856315
+## 282 35.4 30.1978551
+## 283 46.0 31.6974776
+## 284 50.0 31.5551084
+## 285 32.2 27.1036971
+## 286 22.0 26.7430284
+## 287 20.1 22.2821259
+## 288 23.2 27.7775782
+## 289 22.3 27.3409792
+## 290 24.8 25.5281443
+## 291 28.5 31.3937566
+## 292 37.3 31.1754571
+## 293 27.9 30.0934510
+## 294 23.9 26.4108335
+## 295 21.7 24.6834202
+## 296 28.6 28.6033197
+## 297 27.1 27.5402961
+## 298 20.3 19.5201628
+## 299 22.5 29.8371863
+## 300 29.0 30.0554858
+## 301 24.8 28.7931453
+## 302 22.0 25.5376356
+## 303 26.4 26.3254120
+## 304 33.1 29.9415904
+## 305 36.1 27.9768951
+## 306 28.4 26.0786387
+## 307 33.4 28.4134940
+## 308 28.2 27.4074182
+## 309 22.8 30.2453115
+## 310 20.3 25.0915453
+## 311 16.1 22.5573731
+## 312 22.1 28.8785669
+## 313 19.4 23.4305710
+## 314 21.6 27.0562407
+## 315 23.8 25.7464438
+## 316 16.2 23.6393792
+## 317 17.8 17.1568336
+## 318 19.8 19.4252500
+## 319 23.1 24.7213853
+## 320 21.0 22.4719515
+## 321 23.8 27.7206305
+## 322 23.1 28.0338428
+## 323 20.4 27.2460664
+## 324 18.5 23.4115884
+## 325 25.0 28.7456889
+## 326 24.6 29.7327822
+## 327 23.0 28.7172151
+## 328 22.2 22.4150038
+## 329 19.3 25.0915453
+## 330 22.6 27.5877525
+## 331 19.8 25.9267782
+## 332 17.1 22.7566900
+## 333 19.4 27.1226797
+## 334 22.2 29.1633053
+## 335 20.7 28.1477381
+## 336 21.1 26.9518366
+## 337 19.5 25.2528971
+## 338 18.5 24.5315597
+## 339 20.6 26.4772725
+## 340 19.0 25.3098448
+## 341 18.7 25.7369525
+## 342 32.7 29.3436397
+## 343 16.5 26.3443946
+## 344 23.9 27.7396130
+## 345 31.2 30.1788725
+## 346 17.5 24.5600336
+## 347 17.2 22.5288992
+## 348 23.1 28.5178981
+## 349 24.5 28.8690756
+## 350 26.6 28.9639884
+## 351 22.9 28.8785669
+## 352 24.1 29.3436397
+## 353 18.6 27.1606448
+## 354 30.1 30.2832766
+## 355 18.2 26.9138715
+## 356 20.6 29.2677094
+## 357 17.8 17.8496972
+## 358 21.7 21.9594223
+## 359 22.7 23.6583618
+## 360 22.6 22.5288992
+## 361 25.0 27.1606448
+## 362 19.9 21.0862243
+## 363 20.8 24.8827371
+## 364 16.8 20.6591167
+## 365 21.9 29.5334653
+## 366 27.5 27.7965607
+## 367 21.9 21.2665587
+## 368 23.1 21.9024746
+## 369 50.0 31.4601956
+## 370 50.0 31.0141053
+## 371 50.0 31.7449340
+## 372 50.0 25.5091618
+## 373 50.0 26.1260951
+## 374 13.8  1.5531660
+## 375 13.8 -1.4840443
+## 376 15.0 21.7980705
+## 377 13.9 12.4966141
+## 378 13.3 14.3948705
+## 379 13.1 12.0695064
+## 380 10.2 13.8823413
+## 381 10.4 18.2198572
+## 382 10.9 14.5467310
+## 383 11.3 12.1549280
+## 384 12.3 11.2437649
+## 385  8.8  5.4825567
+## 386  7.2  5.3117137
+## 387 10.5  7.7130080
+## 388  7.4  4.1917424
+## 389 10.2  5.4920480
+## 390 11.5 14.7650305
+## 391 15.1 18.3147700
+## 392 23.2 16.7487085
+## 393  9.7 10.1807413
+## 394 13.8 20.1560787
+## 395 12.7 19.0361074
+## 396 13.1 18.3052787
+## 397 12.5 16.1697403
+## 398  8.5 15.6477198
+## 399  5.0  5.5205219
+## 400  6.3  6.1089813
+## 401  5.6  9.1461916
+## 402  7.2 15.2680685
+## 403 12.1 15.2775598
+## 404  8.3 15.7900890
+## 405  8.5  8.5672234
+## 406  5.0 12.7433875
+## 407 11.9 12.4017013
+## 408 27.9 23.0414284
+## 409 17.2  9.4973690
+## 410 27.5 15.7805977
+## 411 15.0 24.9586674
+## 412 17.2 14.4138531
+## 413 17.9  1.9328173
+## 414 16.3 15.4958592
+## 415  7.0 -0.5444073
+## 416  7.2  6.9821793
+## 417  7.5 10.0763372
+## 418 10.4  9.2695782
+## 419  8.8 14.9833300
+## 420  8.4 12.9711782
+## 421 16.7 20.2984479
+## 422 14.2 19.6530408
+## 423 20.8 21.1716459
+## 424 13.4 12.4491577
+## 425 11.7 18.2673136
+## 426  8.3 11.4051167
+## 427 10.2 19.6625320
+## 428 10.9 20.7730120
+## 429 11.0 14.1291146
+## 430  9.5 11.6993464
+## 431 14.5 17.8117320
+## 432 14.1 15.8660192
+## 433 16.1 23.1363413
+## 434 14.3 19.1594941
+## 435 11.7 20.1560787
+## 436 13.4 12.4681403
+## 437  9.6 17.4225895
+## 438  8.7  9.4499126
+## 439  8.4  2.2650121
+## 440 12.8 12.8383003
+## 441 10.5 13.5691290
+## 442 17.1 16.0273710
+## 443 18.4 18.8083167
+## 444 15.4 16.6632869
+## 445 10.8 11.9745936
+## 446 11.8 11.7942593
+## 447 14.9 17.6693628
+## 448 12.6 18.9506859
+## 449 14.1 17.3466592
+## 450 13.0 16.2266880
+## 451 13.4 18.0015577
+## 452 15.2 17.7263105
+## 453 16.1 18.1629095
+## 454 17.8 18.6659474
+## 455 14.9 16.7961649
+## 456 14.1 17.3466592
+## 457 12.7 16.5114264
+## 458 13.5 18.4761218
+## 459 14.9 19.1500028
+## 460 20.0 20.6021690
+## 461 16.4 18.9696685
+## 462 17.7 20.6496254
+## 463 19.5 21.2760500
+## 464 20.2 24.7878243
+## 465 21.4 22.0068787
+## 466 19.9 21.1431720
+## 467 19.0 18.2768049
+## 468 19.1 14.3189403
+## 469 19.1 17.3466592
+## 470 20.1 20.5452213
+## 471 19.9 19.0930551
+## 472 19.6 22.3390736
+## 473 23.2 20.9248725
+## 474 29.8 23.4875187
+## 475 13.8 17.3371679
+## 476 13.3 11.6803639
+## 477 16.7 16.8246387
+## 478 12.0 10.9115700
+## 479 14.6 17.4415721
+## 480 21.4 22.1112828
+## 481 23.0 24.3607166
+## 482 23.7 27.2081012
+## 483 25.0 27.9009648
+## 484 21.8 24.6644377
+## 485 20.6 21.8929833
+## 486 21.2 24.5125771
+## 487 19.1 20.3364131
+## 488 20.6 23.6868356
+## 489 15.2 17.4130982
+## 490  7.0 11.8037505
+## 491  8.1  6.3842285
+## 492 13.6 17.4036069
+## 493 20.1 21.8834920
+## 494 21.8 23.1553238
+## 495 24.5 21.6557013
+## 496 23.1 17.8496972
+## 497 19.7 14.4897833
+## 498 18.3 21.1716459
+## 499 21.2 22.2916172
+## 500 17.5 20.2225177
+## 501 16.8 20.9533464
+## 502 22.4 25.3762838
+## 503 20.6 25.9362694
+## 504 23.9 29.2012705
+## 505 22.0 28.4040028
+## 506 11.9 27.0752233</code></pre>
+<p>A multiple linear regression model.</p>
+<div class="sourceCode" id="cb73"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb73-1"><a href="linear-regression.html#cb73-1" aria-hidden="true" tabindex="-1"></a><span class="co"># specify the model</span></span>
+<span id="cb73-2"><a href="linear-regression.html#cb73-2" aria-hidden="true" tabindex="-1"></a>lm_spec_2 <span class="ot">&lt;-</span> parsnip<span class="sc">::</span><span class="fu">linear_reg</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb73-3"><a href="linear-regression.html#cb73-3" aria-hidden="true" tabindex="-1"></a>  parsnip<span class="sc">::</span><span class="fu">set_mode</span>(<span class="st">&quot;regression&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb73-4"><a href="linear-regression.html#cb73-4" aria-hidden="true" tabindex="-1"></a>  parsnip<span class="sc">::</span><span class="fu">set_engine</span>(<span class="st">&quot;lm&quot;</span>)</span>
+<span id="cb73-5"><a href="linear-regression.html#cb73-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb73-6"><a href="linear-regression.html#cb73-6" aria-hidden="true" tabindex="-1"></a><span class="co"># fit the model</span></span>
+<span id="cb73-7"><a href="linear-regression.html#cb73-7" aria-hidden="true" tabindex="-1"></a>lm_fit_2 <span class="ot">&lt;-</span> lm_spec_2 <span class="sc">%&gt;%</span> </span>
+<span id="cb73-8"><a href="linear-regression.html#cb73-8" aria-hidden="true" tabindex="-1"></a>  parsnip<span class="sc">::</span><span class="fu">fit</span>(medv <span class="sc">~</span> lstat <span class="sc">+</span> age,</span>
+<span id="cb73-9"><a href="linear-regression.html#cb73-9" aria-hidden="true" tabindex="-1"></a>               <span class="at">data =</span> Boston)</span>
+<span id="cb73-10"><a href="linear-regression.html#cb73-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb73-11"><a href="linear-regression.html#cb73-11" aria-hidden="true" tabindex="-1"></a><span class="co"># look at the output</span></span>
+<span id="cb73-12"><a href="linear-regression.html#cb73-12" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(lm_fit_2<span class="sc">$</span>fit)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## stats::lm(formula = medv ~ lstat + age, data = data)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -15.981  -3.978  -1.283   1.968  23.158 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) 33.22276    0.73085  45.458  &lt; 2e-16 ***
+## lstat       -1.03207    0.04819 -21.416  &lt; 2e-16 ***
+## age          0.03454    0.01223   2.826  0.00491 ** 
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 6.173 on 503 degrees of freedom
+## Multiple R-squared:  0.5513, Adjusted R-squared:  0.5495 
+## F-statistic:   309 on 2 and 503 DF,  p-value: &lt; 2.2e-16</code></pre>
+<div class="sourceCode" id="cb75"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb75-1"><a href="linear-regression.html#cb75-1" aria-hidden="true" tabindex="-1"></a>broom<span class="sc">::</span><span class="fu">tidy</span>(lm_fit_2)</span></code></pre></div>
+<pre><code>## # A tibble: 3 x 5
+##   term        estimate std.error statistic   p.value
+##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+## 1 (Intercept)  33.2       0.731      45.5  2.94e-180
+## 2 lstat        -1.03      0.0482    -21.4  8.42e- 73
+## 3 age           0.0345    0.0122      2.83 4.91e-  3</code></pre>
+<div class="sourceCode" id="cb77"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb77-1"><a href="linear-regression.html#cb77-1" aria-hidden="true" tabindex="-1"></a>broom<span class="sc">::</span><span class="fu">augment</span>(lm_fit_2, <span class="at">new_data =</span> Boston) <span class="sc">%&gt;%</span> </span>
+<span id="cb77-2"><a href="linear-regression.html#cb77-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(medv, .pred)</span></code></pre></div>
+<pre><code>##     medv      .pred
+## 1   24.0 30.3353500
+## 2   21.6 26.5152022
+## 3   34.7 31.1741833
+## 4   33.4 31.7706097
+## 5   36.2 29.5941382
+## 6   28.7 29.8734360
+## 7   22.9 22.6948012
+## 8   27.1 16.7783585
+## 9   16.5  5.7873823
+## 10  18.9 18.5417468
+## 11  15.0 15.3744895
+## 12  18.9 22.3909364
+## 13  21.7 18.3561926
+## 14  20.4 26.8327143
+## 15  18.2 25.5527337
+## 16  19.9 26.4328949
+## 17  23.1 27.4438985
+## 18  17.5 20.9045872
+## 19  20.2 22.4222018
+## 20  18.2 23.9818587
+## 21  13.6 14.9174789
+## 22  19.6 22.0306073
+## 23  15.2 17.0701529
+## 24  14.5 16.1596713
+## 25  15.6 19.6506652
+## 26  13.9 19.1437584
+## 27  16.6 21.0571789
+## 28  14.8 18.4561530
+## 29  18.4 23.2732685
+## 30  21.0 23.8742999
+## 31  12.7 13.1486332
+## 32  14.5 23.2190203
+## 33  13.2  7.4567764
+## 34  13.1 17.5660145
+## 35  13.5 15.5778323
+## 36  18.9 25.5882607
+## 37  20.0 23.5678806
+## 38  21.0 25.6051093
+## 39  24.7 23.8111450
+## 40  30.8 29.5172909
+## 41  34.9 31.7250653
+## 42  26.6 28.3277273
+## 43  25.3 27.4544348
+## 44  24.7 25.7687086
+## 45  21.2 24.7482793
+## 46  19.3 23.8529391
+## 47  20.0 19.7693168
+## 48  16.6 16.7734125
+## 49  14.4  4.7168035
+## 50  19.4 18.6449988
+## 51  19.7 20.9201146
+## 52  20.5 25.6666473
+## 53  25.0 28.5023241
+## 54  23.4 25.2616714
+## 55  18.9 19.5924563
+## 56  35.4 29.0150318
+## 57  24.7 28.5009578
+## 58  31.6 30.5451354
+## 59  23.3 27.1514649
+## 60  19.6 25.3375812
+## 61  18.7 21.9378941
+## 62  16.0 21.5461317
+## 63  22.2 28.6190453
+## 64  25.0 24.9173335
+## 65  33.0 26.9699967
+## 66  23.5 29.0178896
+## 67  19.4 23.7287074
+## 68  22.0 25.6022540
+## 69  17.4 20.9842147
+## 70  20.9 25.2908410
+## 71  24.2 26.5152524
+## 72  21.7 23.6304490
+## 73  22.8 27.7951879
+## 74  23.4 25.6551385
+## 75  24.1 26.4326017
+## 76  21.4 25.5505628
+## 77  20.0 23.4424530
+## 78  20.8 24.2055471
+## 79  21.2 22.3420654
+## 80  20.3 25.0952594
+## 81  28.0 28.9203532
+## 82  23.9 28.2031469
+## 83  24.8 27.3995875
+## 84  22.9 27.0851462
+## 85  23.9 24.9523892
+## 86  26.6 28.4212902
+## 87  22.5 21.5083085
+## 88  22.2 26.4742203
+## 89  23.6 30.5275598
+## 90  28.7 29.5197175
+## 91  22.6 26.4136173
+## 92  22.0 27.3126249
+## 93  22.9 26.6526576
+## 94  25.0 27.8119461
+## 95  20.6 24.9634318
+## 96  28.4 28.3561673
+## 97  21.4 23.9233890
+## 98  38.7 31.5031216
+## 99  43.8 30.8129619
+## 100 33.2 28.9932773
+## 101 27.5 26.2607673
+## 102 26.5 27.7698060
+## 103 18.6 25.2019582
+## 104 19.3 22.3709342
+## 105 20.1 23.6063456
+## 106 19.5 19.5650288
+## 107 19.5 17.1389858
+## 108 20.4 21.6240921
+## 109 19.8 23.9135345
+## 110 19.4 20.3245380
+## 111 21.7 21.6850812
+## 112 22.8 25.5557619
+## 113 18.8 19.7020982
+## 114 18.7 18.8802387
+## 115 18.5 25.3462773
+## 116 18.3 20.0041706
+## 117 21.2 23.3011196
+## 118 19.2 25.4458167
+## 119 20.4 19.8850578
+## 120 19.3 21.4285982
+## 121 22.0 20.7996757
+## 122 20.3 21.4003210
+## 123 20.5 17.9269402
+## 124 17.3 10.3486992
+## 125 18.8 18.3883428
+## 126 21.4 20.9915446
+## 127 15.7  8.3910102
+## 128 16.2 18.7977584
+## 129 18.0 20.7522060
+## 130 14.3 17.5659719
+## 131 19.2 23.6351317
+## 132 19.6 23.9445818
+## 133 23.0 25.1280488
+## 134 18.4 21.0062999
+## 135 15.6 18.7568166
+## 136 18.1 19.1111317
+## 137 17.4 19.0106975
+## 138 17.1 21.5640431
+## 139 13.3 14.6113128
+## 140 17.8 17.5526656
+## 141 14.0 11.5213341
+## 142 14.4  1.1637151
+## 143 13.4  8.9971155
+## 144 15.6  9.4099429
+## 145 11.8  6.3719086
+## 146 13.8  7.9856883
+## 147 15.6 19.4932528
+## 148 14.6  6.0516690
+## 149 17.8  7.2348378
+## 150 15.4 14.3631476
+## 151 21.5 22.0317579
+## 152 19.6 22.9713239
+## 153 15.3 23.7539913
+## 154 19.4 20.3290153
+## 155 17.0 20.9341403
+## 156 15.6 20.5744531
+## 157 13.1 19.8123417
+## 158 41.3 31.8501844
+## 159 24.3 30.0409935
+## 160 23.3 29.0502077
+## 161 27.0 30.7451892
+## 162 50.0 34.5739079
+## 163 50.0 34.6334429
+## 164 50.0 33.0400063
+## 165 22.7 24.3806527
+## 166 25.0 26.3107914
+## 167 50.0 32.7272722
+## 168 23.8 23.4293598
+## 169 23.8 25.0865104
+## 170 22.3 24.8283654
+## 171 17.4 21.5979056
+## 172 19.1 24.1681398
+## 173 23.1 21.1188473
+## 174 23.6 26.7980396
+## 175 22.6 25.6468156
+## 176 29.4 28.8652527
+## 177 23.2 24.4190401
+## 178 24.6 29.2666037
+## 179 29.9 28.6509449
+## 180 37.2 30.0385243
+## 181 39.8 28.2978656
+## 182 36.2 25.6183705
+## 183 37.9 31.4331781
+## 184 32.5 30.6630499
+## 185 26.4 21.8965236
+## 186 29.6 22.0277094
+## 187 50.0 30.4816320
+## 188 32.0 27.7483148
+## 189 29.8 29.5217681
+## 190 34.9 29.0036857
+## 191 37.0 28.7019141
+## 192 30.5 29.4463246
+## 193 36.4 31.1692399
+## 194 31.1 28.3734446
+## 195 29.1 29.3517338
+## 196 50.0 31.2629357
+## 197 33.3 30.1898827
+## 198 30.3 25.6009730
+## 199 34.6 27.7135148
+## 200 34.9 29.0450563
+## 201 32.9 29.1102217
+## 202 24.1 26.8809937
+## 203 42.3 30.5553734
+## 204 48.5 30.4374513
+## 205 50.0 31.3523675
+## 206 22.6 22.7745140
+## 207 24.4 23.7145462
+## 208 22.5 17.0949757
+## 209 24.4 20.1342058
+## 210 20.0 12.8467312
+## 211 21.7 18.5804700
+## 212 19.3 11.5343848
+## 213 22.4 18.5371869
+## 214 28.1 24.6577395
+## 215 23.7  3.0636690
+## 216 25.0 24.9137512
+## 217 23.3 21.2139972
+## 218 28.7 26.1617394
+## 219 21.5 17.9683508
+## 220 23.0 25.5779375
+## 221 26.7 26.2585487
+## 222 21.7 14.2284673
+## 223 27.5 25.6584148
+## 224 30.1 28.1702220
+## 225 44.8 31.6548184
+## 226 50.0 31.3114632
+## 227 37.6 32.9804712
+## 228 31.6 29.4188971
+## 229 46.7 29.7643055
+## 230 31.5 30.0814316
+## 231 24.3 23.5516312
+## 232 31.7 30.4608602
+## 233 41.7 33.2056512
+## 234 48.3 31.5780111
+## 235 29.0 27.2118071
+## 236 24.0 24.1183314
+## 237 25.1 26.0194683
+## 238 31.5 30.8144509
+## 239 23.7 27.2978747
+## 240 23.3 27.0741863
+## 241 22.0 23.3535779
+## 242 20.1 22.6739468
+## 243 22.2 23.4703468
+## 244 23.7 28.1357705
+## 245 17.6 22.9645454
+## 246 18.5 16.5957874
+## 247 24.3 24.9746099
+## 248 20.5 25.4831762
+## 249 24.5 25.0935948
+## 250 26.2 27.0569167
+## 251 24.4 27.5826324
+## 252 24.8 29.8250790
+## 253 29.6 29.8144600
+## 254 42.8 29.8594103
+## 255 21.9 27.5474889
+## 256 20.9 24.3359232
+## 257 44.0 31.1944437
+## 258 50.0 30.9404725
+## 259 36.0 28.6373803
+## 260 30.1 29.5559213
+## 261 33.8 26.1509499
+## 262 43.1 28.8182066
+## 263 48.8 30.2840423
+## 264 31.0 24.8764292
+## 265 36.5 28.0272666
+## 266 22.8 24.6070285
+## 267 30.7 20.8809175
+## 268 50.0 27.8586411
+## 269 43.5 31.7784561
+## 270 20.7 21.2595015
+## 271 21.1 21.2601859
+## 272 25.2 26.9845014
+## 273 24.4 27.2726232
+## 274 35.2 28.2211461
+## 275 32.4 30.7160672
+## 276 32.0 31.6256939
+## 277 33.2 28.6714183
+## 278 33.1 29.8827790
+## 279 29.1 26.9110608
+## 280 35.1 29.3295557
+## 281 45.4 31.5702926
+## 282 35.4 29.7706152
+## 283 46.0 31.8330878
+## 284 50.0 30.8181235
+## 285 32.2 25.8395445
+## 286 22.0 25.8308006
+## 287 20.1 20.9662607
+## 288 23.2 26.9350288
+## 289 22.3 26.9542613
+## 290 24.8 24.1988538
+## 291 28.5 30.7497593
+## 292 37.3 30.5054746
+## 293 27.9 29.1803758
+## 294 23.9 25.0032281
+## 295 21.7 23.9504730
+## 296 28.6 27.8260196
+## 297 27.1 27.3575351
+## 298 20.3 18.8783661
+## 299 22.5 28.7877210
+## 300 29.0 28.6761989
+## 301 24.8 28.5955060
+## 302 22.0 24.8137005
+## 303 26.4 24.9103419
+## 304 33.1 28.8183421
+## 305 36.1 27.4902977
+## 306 28.4 26.0134143
+## 307 33.4 29.0290149
+## 308 28.2 27.8797512
+## 309 22.8 31.3870772
+## 310 20.3 25.5825877
+## 311 16.1 21.4831899
+## 312 22.1 28.8749316
+## 313 19.4 24.2497252
+## 314 21.6 27.9296901
+## 315 23.8 26.6608850
+## 316 16.2 24.0380672
+## 317 17.8 17.1790327
+## 318 19.8 19.2484167
+## 319 23.1 24.8519098
+## 320 21.0 22.1157348
+## 321 23.8 27.5985358
+## 322 23.1 28.0082071
+## 323 20.4 26.9995951
+## 324 18.5 23.6729199
+## 325 25.0 28.2917289
+## 326 24.6 28.4876540
+## 327 23.0 27.8738702
+## 328 22.2 21.5321912
+## 329 19.3 23.8242809
+## 330 22.6 26.2415399
+## 331 19.8 24.9535850
+## 332 17.1 21.3752075
+## 333 19.4 25.9465468
+## 334 22.2 28.6767504
+## 335 20.7 27.5862548
+## 336 21.1 26.1476710
+## 337 19.5 24.7078915
+## 338 18.5 24.3829591
+## 339 20.6 25.7283609
+## 340 19.0 24.7387257
+## 341 18.7 25.6556874
+## 342 32.7 29.2597400
+## 343 16.5 26.3576645
+## 344 23.9 27.7608089
+## 345 31.2 29.4356204
+## 346 17.5 24.0304790
+## 347 17.2 21.9531207
+## 348 23.1 27.6156826
+## 349 24.5 28.0666367
+## 350 26.6 28.3356564
+## 351 22.9 28.5847592
+## 352 24.1 28.7968459
+## 353 18.6 25.8220167
+## 354 30.1 29.8255026
+## 355 18.2 25.6711296
+## 356 20.6 28.1477532
+## 357 17.8 18.4229724
+## 358 21.7 22.6707455
+## 359 22.7 24.2556113
+## 360 22.6 22.9549065
+## 361 25.0 28.2228482
+## 362 19.9 21.7246968
+## 363 20.8 26.0291472
+## 364 16.8 21.1877229
+## 365 21.9 30.6268435
+## 366 27.5 28.9108797
+## 367 21.9 21.9311532
+## 368 23.1 22.9197204
+## 369 50.0 33.3126509
+## 370 50.0 32.7170368
+## 371 50.0 33.5359106
+## 372 50.0 26.8415810
+## 373 50.0 27.1531644
+## 374 13.8  0.7921704
+## 375 13.8 -2.5104490
+## 376 15.0 22.7336498
+## 377 13.9 12.4604739
+## 378 13.3 14.7146049
+## 379 13.1 12.0962216
+## 380 10.2 14.1987411
+## 381 10.4 18.6354853
+## 382 10.9 14.8900992
+## 383 11.3 12.3203763
+## 384 12.3 11.3295905
+## 385  8.8  4.7609441
+## 386  7.2  4.8135277
+## 387 10.5  7.4902954
+## 388  7.4  3.2986055
+## 389 10.2  5.0752550
+## 390 11.5 15.1205661
+## 391 15.1 18.9148682
+## 392 23.2 16.7110622
+## 393  9.7 10.0700406
+## 394 13.8 20.7650862
+## 395 12.7 19.6197884
+## 396 13.1 18.9667274
+## 397 12.5 16.5478489
+## 398  8.5 16.0803898
+## 399  5.0  5.1062170
+## 400  6.3  4.9792152
+## 401  5.6  9.0487189
+## 402  7.2 15.7055612
+## 403 12.1 15.7158819
+## 404  8.3 16.1350215
+## 405  8.5  7.9148098
+## 406  5.0 12.9602588
+## 407 11.9 12.5887141
+## 408 27.9 24.1582027
+## 409 17.2  9.3580412
+## 410 27.5 16.2628782
+## 411 15.0 26.2429812
+## 412 17.2 14.7766995
+## 413 17.9  1.2049978
+## 414 16.3 15.9532576
+## 415  7.0 -1.4887011
+## 416  7.2  6.6956026
+## 417  7.5  9.7423382
+## 418 10.4  8.8063545
+## 419  8.8 15.3959406
+## 420  8.4 12.3961633
+## 421 16.7 21.1755246
+## 422 14.2 20.3113595
+## 423 20.8 21.6966778
+## 424 13.4 12.1256069
+## 425 11.7 17.9512943
+## 426  8.3 11.3461382
+## 427 10.2 19.0919018
+## 428 10.9 20.9557644
+## 429 11.0 13.7105579
+## 430  9.5 11.6729883
+## 431 14.5 17.9913386
+## 432 14.1 16.1588616
+## 433 16.1 23.3908922
+## 434 14.3 19.5190558
+## 435 11.7 20.8479926
+## 436 13.4 12.4744195
+## 437  9.6 17.8169097
+## 438  8.7  9.3789809
+## 439  8.4  1.1482353
+## 440 12.8 12.8527452
+## 441 10.5 13.5956215
+## 442 17.1 16.4344919
+## 443 18.4 19.5551769
+## 444 15.4 17.2227020
+## 445 10.8 12.0068325
+## 446 11.8 11.7485597
+## 447 14.9 18.1923350
+## 448 12.6 19.5925364
+## 449 14.1 17.9208837
+## 450 13.0 16.6892250
+## 451 13.4 18.4222905
+## 452 15.2 18.3164389
+## 453 16.1 18.5701067
+## 454 17.8 19.3761856
+## 455 14.9 17.1633800
+## 456 14.1 17.4994427
+## 457 12.7 16.6395845
+## 458 13.5 18.5134294
+## 459 14.9 19.3636489
+## 460 20.0 20.9668948
+## 461 16.4 19.3851852
+## 462 17.7 21.1566756
+## 463 19.5 21.6513014
+## 464 20.2 25.7083110
+## 465 21.4 21.8380139
+## 466 19.9 20.3046688
+## 467 19.0 18.4486901
+## 468 19.1 14.4834987
+## 469 19.1 16.9640055
+## 470 20.1 19.9480925
+## 471 19.9 19.3120881
+## 472 19.6 23.0732096
+## 473 23.2 20.9930813
+## 474 29.8 23.5240384
+## 475 13.8 17.7965667
+## 476 13.3 11.7145267
+## 477 16.7 17.1770698
+## 478 12.0 10.8750967
+## 479 14.6 17.9550019
+## 480 21.4 22.7322434
+## 481 23.0 24.3733629
+## 482 23.7 27.8219208
+## 483 25.0 28.6478740
+## 484 21.8 23.8607429
+## 485 20.6 20.9023737
+## 486 21.2 24.0963263
+## 487 19.1 20.5190117
+## 488 20.6 23.2433343
+## 489 15.2 17.7858624
+## 490  7.0 11.8797855
+## 491  8.1  5.9763107
+## 492 13.6 17.9862622
+## 493 20.1 22.3290975
+## 494 21.8 22.6930114
+## 495 24.5 20.6685376
+## 496 23.1 16.0532308
+## 497 19.7 13.9231134
+## 498 18.3 21.1094241
+## 499 21.2 22.1441800
+## 500 17.5 20.1775341
+## 501 16.8 21.1864018
+## 502 22.4 25.6296713
+## 503 20.6 26.5011287
+## 504 23.9 30.5454286
+## 505 22.0 29.6197657
+## 506 11.9 27.8812428</code></pre>
+<p>A more complicated linear regression model.</p>
+<div class="sourceCode" id="cb79"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb79-1"><a href="linear-regression.html#cb79-1" aria-hidden="true" tabindex="-1"></a><span class="co"># fit the model using all available varaibles as predictors</span></span>
+<span id="cb79-2"><a href="linear-regression.html#cb79-2" aria-hidden="true" tabindex="-1"></a>lm_fit_3 <span class="ot">&lt;-</span> lm_spec_2 <span class="sc">%&gt;%</span> </span>
+<span id="cb79-3"><a href="linear-regression.html#cb79-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(medv <span class="sc">~</span> ., Boston)</span>
+<span id="cb79-4"><a href="linear-regression.html#cb79-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb79-5"><a href="linear-regression.html#cb79-5" aria-hidden="true" tabindex="-1"></a><span class="co"># look at modle fit output</span></span>
+<span id="cb79-6"><a href="linear-regression.html#cb79-6" aria-hidden="true" tabindex="-1"></a><span class="fu">tidy</span>(lm_fit_3) <span class="sc">%&gt;%</span> </span>
+<span id="cb79-7"><a href="linear-regression.html#cb79-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(p.value <span class="sc">&lt;</span> <span class="fl">0.05</span>)</span></code></pre></div>
+<pre><code>## # A tibble: 12 x 5
+##    term         estimate std.error statistic  p.value
+##    &lt;chr&gt;           &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+##  1 (Intercept)  36.5       5.10         7.14 3.28e-12
+##  2 crim         -0.108     0.0329      -3.29 1.09e- 3
+##  3 zn            0.0464    0.0137       3.38 7.78e- 4
+##  4 chas          2.69      0.862        3.12 1.93e- 3
+##  5 nox         -17.8       3.82        -4.65 4.25e- 6
+##  6 rm            3.81      0.418        9.12 1.98e-18
+##  7 dis          -1.48      0.199       -7.40 6.01e-13
+##  8 rad           0.306     0.0663       4.61 5.07e- 6
+##  9 tax          -0.0123    0.00376     -3.28 1.11e- 3
+## 10 ptratio      -0.953     0.131       -7.28 1.31e-12
+## 11 black         0.00931   0.00269      3.47 5.73e- 4
+## 12 lstat        -0.525     0.0507     -10.3  7.78e-23</code></pre>
+<p>Interaction terms in formula</p>
+<div class="sourceCode" id="cb81"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb81-1"><a href="linear-regression.html#cb81-1" aria-hidden="true" tabindex="-1"></a><span class="co"># fit a model with an interaction specfied in the formula</span></span>
+<span id="cb81-2"><a href="linear-regression.html#cb81-2" aria-hidden="true" tabindex="-1"></a>lm_fit_4 <span class="ot">&lt;-</span> lm_spec_2 <span class="sc">%&gt;%</span> </span>
+<span id="cb81-3"><a href="linear-regression.html#cb81-3" aria-hidden="true" tabindex="-1"></a>  parsnip<span class="sc">::</span><span class="fu">fit</span>(medv <span class="sc">~</span> lstat <span class="sc">*</span> age, <span class="at">data =</span> Boston)</span>
+<span id="cb81-4"><a href="linear-regression.html#cb81-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb81-5"><a href="linear-regression.html#cb81-5" aria-hidden="true" tabindex="-1"></a><span class="co"># look at the model fit output in a tidy form</span></span>
+<span id="cb81-6"><a href="linear-regression.html#cb81-6" aria-hidden="true" tabindex="-1"></a>broom<span class="sc">::</span><span class="fu">tidy</span>(lm_fit_4)</span></code></pre></div>
+<pre><code>## # A tibble: 4 x 5
+##   term         estimate std.error statistic  p.value
+##   &lt;chr&gt;           &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+## 1 (Intercept) 36.1        1.47      24.6    4.91e-88
+## 2 lstat       -1.39       0.167     -8.31   8.78e-16
+## 3 age         -0.000721   0.0199    -0.0363 9.71e- 1
+## 4 lstat:age    0.00416    0.00185    2.24   2.52e- 2</code></pre>
+<p>Interactions terms using <code>recipes</code>.</p>
+<div class="sourceCode" id="cb83"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb83-1"><a href="linear-regression.html#cb83-1" aria-hidden="true" tabindex="-1"></a><span class="co"># specify the interaction using recipes</span></span>
+<span id="cb83-2"><a href="linear-regression.html#cb83-2" aria-hidden="true" tabindex="-1"></a>rec_spec <span class="ot">&lt;-</span> recipes<span class="sc">::</span><span class="fu">recipe</span>(medv <span class="sc">~</span> lstat <span class="sc">+</span> age, <span class="at">data =</span> Boston) <span class="sc">%&gt;%</span> </span>
+<span id="cb83-3"><a href="linear-regression.html#cb83-3" aria-hidden="true" tabindex="-1"></a>  recipes<span class="sc">::</span><span class="fu">step_interact</span>(<span class="at">terms =</span> <span class="sc">~</span> lstat<span class="sc">:</span>age)</span>
+<span id="cb83-4"><a href="linear-regression.html#cb83-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb83-5"><a href="linear-regression.html#cb83-5" aria-hidden="true" tabindex="-1"></a><span class="co"># create a modelling workflow</span></span>
+<span id="cb83-6"><a href="linear-regression.html#cb83-6" aria-hidden="true" tabindex="-1"></a>lm_wf <span class="ot">&lt;-</span> workflows<span class="sc">::</span><span class="fu">workflow</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb83-7"><a href="linear-regression.html#cb83-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_model</span>(lm_spec) <span class="sc">%&gt;%</span> </span>
+<span id="cb83-8"><a href="linear-regression.html#cb83-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_recipe</span>(rec_spec)</span>
+<span id="cb83-9"><a href="linear-regression.html#cb83-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb83-10"><a href="linear-regression.html#cb83-10" aria-hidden="true" tabindex="-1"></a><span class="co"># run the workflow</span></span>
+<span id="cb83-11"><a href="linear-regression.html#cb83-11" aria-hidden="true" tabindex="-1"></a>lm_wf_out <span class="ot">&lt;-</span> lm_wf <span class="sc">%&gt;%</span> </span>
+<span id="cb83-12"><a href="linear-regression.html#cb83-12" aria-hidden="true" tabindex="-1"></a>  parsnip<span class="sc">::</span><span class="fu">fit</span>(Boston)</span>
+<span id="cb83-13"><a href="linear-regression.html#cb83-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb83-14"><a href="linear-regression.html#cb83-14" aria-hidden="true" tabindex="-1"></a><span class="fu">tidy</span>(lm_wf_out)</span></code></pre></div>
+<pre><code>## # A tibble: 4 x 3
+##   term          estimate std.error
+##   &lt;chr&gt;            &lt;dbl&gt;     &lt;dbl&gt;
+## 1 (Intercept) 36.0         1.49   
+## 2 lstat       -1.39        0.168  
+## 3 age         -0.0000935   0.0205 
+## 4 lstat_x_age  0.00409     0.00183</code></pre>
+<div class="sourceCode" id="cb85"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb85-1"><a href="linear-regression.html#cb85-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glance</span>(lm_wf_out)</span></code></pre></div>
+<pre><code>## # A tibble: 1 x 4
+##   algorithm   pss  nobs sigma
+##   &lt;chr&gt;     &lt;dbl&gt; &lt;int&gt; &lt;dbl&gt;
+## 1 sampling   4000   506  6.15</code></pre>
+<div class="sourceCode" id="cb87"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb87-1"><a href="linear-regression.html#cb87-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get the actual model fit</span></span>
+<span id="cb87-2"><a href="linear-regression.html#cb87-2" aria-hidden="true" tabindex="-1"></a>lm_wf_out<span class="sc">$</span>fit<span class="sc">$</span>fit<span class="sc">$</span>fit</span></code></pre></div>
+<pre><code>## stan_glm
+##  family:       gaussian [identity]
+##  formula:      ..y ~ .
+##  observations: 506
+##  predictors:   4
+## ------
+##             Median MAD_SD
+## (Intercept) 36.0    1.5  
+## lstat       -1.4    0.2  
+## age          0.0    0.0  
+## lstat_x_age  0.0    0.0  
+## 
+## Auxiliary parameter(s):
+##       Median MAD_SD
+## sigma 6.2    0.2   
+## 
+## ------
+## * For help interpreting the printed output see ?print.stanreg
+## * For info on the priors used see ?prior_summary.stanreg</code></pre>
+<p>Applying non-linear transformations to predictors</p>
+<div class="sourceCode" id="cb89"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb89-1"><a href="linear-regression.html#cb89-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create a new recipe</span></span>
+<span id="cb89-2"><a href="linear-regression.html#cb89-2" aria-hidden="true" tabindex="-1"></a>rec_spec_pow2 <span class="ot">&lt;-</span> recipes<span class="sc">::</span><span class="fu">recipe</span>(medv <span class="sc">~</span> lstat, <span class="at">data =</span> Boston) <span class="sc">%&gt;%</span> </span>
+<span id="cb89-3"><a href="linear-regression.html#cb89-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_mutate</span>(<span class="at">lstat =</span> lstat <span class="sc">^</span> <span class="dv">2</span>)</span>
+<span id="cb89-4"><a href="linear-regression.html#cb89-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb89-5"><a href="linear-regression.html#cb89-5" aria-hidden="true" tabindex="-1"></a><span class="co"># create a new workflow including the new recipe</span></span>
+<span id="cb89-6"><a href="linear-regression.html#cb89-6" aria-hidden="true" tabindex="-1"></a>lm_wf_pow2 <span class="ot">&lt;-</span> workflows<span class="sc">::</span><span class="fu">workflow</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb89-7"><a href="linear-regression.html#cb89-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_model</span>(lm_spec) <span class="sc">%&gt;%</span> </span>
+<span id="cb89-8"><a href="linear-regression.html#cb89-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_recipe</span>(rec_spec_pow2)</span>
+<span id="cb89-9"><a href="linear-regression.html#cb89-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb89-10"><a href="linear-regression.html#cb89-10" aria-hidden="true" tabindex="-1"></a><span class="co"># fit the workflow</span></span>
+<span id="cb89-11"><a href="linear-regression.html#cb89-11" aria-hidden="true" tabindex="-1"></a>lm_wf_pow2 <span class="sc">%&gt;%</span> </span>
+<span id="cb89-12"><a href="linear-regression.html#cb89-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(<span class="at">data =</span> Boston)</span></code></pre></div>
+<pre><code>## == Workflow [trained] ==========================================================
+## Preprocessor: Recipe
+## Model: linear_reg()
+## 
+## -- Preprocessor ----------------------------------------------------------------
+## 1 Recipe Step
+## 
+## * step_mutate()
+## 
+## -- Model -----------------------------------------------------------------------
+## stan_glm
+##  family:       gaussian [identity]
+##  formula:      ..y ~ .
+##  observations: 506
+##  predictors:   2
+## ------
+##             Median MAD_SD
+## (Intercept) 27.6    0.4  
+## lstat        0.0    0.0  
+## 
+## Auxiliary parameter(s):
+##       Median MAD_SD
+## sigma 7.2    0.2   
+## 
+## ------
+## * For help interpreting the printed output see ?print.stanreg
+## * For info on the priors used see ?prior_summary.stanreg</code></pre>
+<p>Using predefined steps from <code>recipes</code>.</p>
+<div class="sourceCode" id="cb91"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb91-1"><a href="linear-regression.html#cb91-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create different recipe</span></span>
+<span id="cb91-2"><a href="linear-regression.html#cb91-2" aria-hidden="true" tabindex="-1"></a>rec_spec_log <span class="ot">&lt;-</span> recipes<span class="sc">::</span><span class="fu">recipe</span>(medv <span class="sc">~</span> lstat, <span class="at">data =</span> Boston) <span class="sc">%&gt;%</span> </span>
+<span id="cb91-3"><a href="linear-regression.html#cb91-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_log</span>(lstat)</span>
+<span id="cb91-4"><a href="linear-regression.html#cb91-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb91-5"><a href="linear-regression.html#cb91-5" aria-hidden="true" tabindex="-1"></a><span class="co"># create a workflow incorporating this recipe</span></span>
+<span id="cb91-6"><a href="linear-regression.html#cb91-6" aria-hidden="true" tabindex="-1"></a>lm_wf_log <span class="ot">&lt;-</span> workflows<span class="sc">::</span><span class="fu">workflow</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb91-7"><a href="linear-regression.html#cb91-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_model</span>(lm_spec) <span class="sc">%&gt;%</span> </span>
+<span id="cb91-8"><a href="linear-regression.html#cb91-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_recipe</span>(rec_spec_log)</span>
+<span id="cb91-9"><a href="linear-regression.html#cb91-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb91-10"><a href="linear-regression.html#cb91-10" aria-hidden="true" tabindex="-1"></a><span class="co"># run the workflow</span></span>
+<span id="cb91-11"><a href="linear-regression.html#cb91-11" aria-hidden="true" tabindex="-1"></a>lm_wf_log <span class="sc">%&gt;%</span> </span>
+<span id="cb91-12"><a href="linear-regression.html#cb91-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(<span class="at">data =</span> Boston)</span></code></pre></div>
+<pre><code>## == Workflow [trained] ==========================================================
+## Preprocessor: Recipe
+## Model: linear_reg()
+## 
+## -- Preprocessor ----------------------------------------------------------------
+## 1 Recipe Step
+## 
+## * step_log()
+## 
+## -- Model -----------------------------------------------------------------------
+## stan_glm
+##  family:       gaussian [identity]
+##  formula:      ..y ~ .
+##  observations: 506
+##  predictors:   2
+## ------
+##             Median MAD_SD
+## (Intercept)  52.1    0.9 
+## lstat       -12.5    0.4 
+## 
+## Auxiliary parameter(s):
+##       Median MAD_SD
+## sigma 5.3    0.2   
+## 
+## ------
+## * For help interpreting the printed output see ?print.stanreg
+## * For info on the priors used see ?prior_summary.stanreg</code></pre>
+<p>Dealing with qualitative predictors. Many models convert qualitative predictors to dummy variables automatically, so qualitative predictors can just be added the formula. But if not, dummy variables can be created in the recipe.</p>
+<div class="sourceCode" id="cb93"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb93-1"><a href="linear-regression.html#cb93-1" aria-hidden="true" tabindex="-1"></a><span class="co"># look at the dataset used in the lab </span></span>
+<span id="cb93-2"><a href="linear-regression.html#cb93-2" aria-hidden="true" tabindex="-1"></a>Carseats</span></code></pre></div>
+<pre><code>##     Sales CompPrice Income Advertising Population Price ShelveLoc Age Education
+## 1    9.50       138     73          11        276   120       Bad  42        17
+## 2   11.22       111     48          16        260    83      Good  65        10
+## 3   10.06       113     35          10        269    80    Medium  59        12
+## 4    7.40       117    100           4        466    97    Medium  55        14
+## 5    4.15       141     64           3        340   128       Bad  38        13
+## 6   10.81       124    113          13        501    72       Bad  78        16
+## 7    6.63       115    105           0         45   108    Medium  71        15
+## 8   11.85       136     81          15        425   120      Good  67        10
+## 9    6.54       132    110           0        108   124    Medium  76        10
+## 10   4.69       132    113           0        131   124    Medium  76        17
+## 11   9.01       121     78           9        150   100       Bad  26        10
+## 12  11.96       117     94           4        503    94      Good  50        13
+## 13   3.98       122     35           2        393   136    Medium  62        18
+## 14  10.96       115     28          11         29    86      Good  53        18
+## 15  11.17       107    117          11        148   118      Good  52        18
+## 16   8.71       149     95           5        400   144    Medium  76        18
+## 17   7.58       118     32           0        284   110      Good  63        13
+## 18  12.29       147     74          13        251   131      Good  52        10
+## 19  13.91       110    110           0        408    68      Good  46        17
+## 20   8.73       129     76          16         58   121    Medium  69        12
+## 21   6.41       125     90           2        367   131    Medium  35        18
+## 22  12.13       134     29          12        239   109      Good  62        18
+## 23   5.08       128     46           6        497   138    Medium  42        13
+## 24   5.87       121     31           0        292   109    Medium  79        10
+## 25  10.14       145    119          16        294   113       Bad  42        12
+## 26  14.90       139     32           0        176    82      Good  54        11
+## 27   8.33       107    115          11        496   131      Good  50        11
+## 28   5.27        98    118           0         19   107    Medium  64        17
+## 29   2.99       103     74           0        359    97       Bad  55        11
+## 30   7.81       104     99          15        226   102       Bad  58        17
+## 31  13.55       125     94           0        447    89      Good  30        12
+## 32   8.25       136     58          16        241   131    Medium  44        18
+## 33   6.20       107     32          12        236   137      Good  64        10
+## 34   8.77       114     38          13        317   128      Good  50        16
+## 35   2.67       115     54           0        406   128    Medium  42        17
+## 36  11.07       131     84          11         29    96    Medium  44        17
+## 37   8.89       122     76           0        270   100      Good  60        18
+## 38   4.95       121     41           5        412   110    Medium  54        10
+## 39   6.59       109     73           0        454   102    Medium  65        15
+## 40   3.24       130     60           0        144   138       Bad  38        10
+## 41   2.07       119     98           0         18   126       Bad  73        17
+## 42   7.96       157     53           0        403   124       Bad  58        16
+## 43  10.43        77     69           0         25    24    Medium  50        18
+## 44   4.12       123     42          11         16   134    Medium  59        13
+## 45   4.16        85     79           6        325    95    Medium  69        13
+## 46   4.56       141     63           0        168   135       Bad  44        12
+## 47  12.44       127     90          14         16    70    Medium  48        15
+## 48   4.38       126     98           0        173   108       Bad  55        16
+## 49   3.91       116     52           0        349    98       Bad  69        18
+## 50  10.61       157     93           0         51   149      Good  32        17
+## 51   1.42        99     32          18        341   108       Bad  80        16
+## 52   4.42       121     90           0        150   108       Bad  75        16
+## 53   7.91       153     40           3        112   129       Bad  39        18
+## 54   6.92       109     64          13         39   119    Medium  61        17
+## 55   4.90       134    103          13         25   144    Medium  76        17
+## 56   6.85       143     81           5         60   154    Medium  61        18
+## 57  11.91       133     82           0         54    84    Medium  50        17
+## 58   0.91        93     91           0         22   117       Bad  75        11
+## 59   5.42       103     93          15        188   103       Bad  74        16
+## 60   5.21       118     71           4        148   114    Medium  80        13
+## 61   8.32       122    102          19        469   123       Bad  29        13
+## 62   7.32       105     32           0        358   107    Medium  26        13
+## 63   1.82       139     45           0        146   133       Bad  77        17
+## 64   8.47       119     88          10        170   101    Medium  61        13
+## 65   7.80       100     67          12        184   104    Medium  32        16
+## 66   4.90       122     26           0        197   128    Medium  55        13
+## 67   8.85       127     92           0        508    91    Medium  56        18
+## 68   9.01       126     61          14        152   115    Medium  47        16
+## 69  13.39       149     69          20        366   134      Good  60        13
+## 70   7.99       127     59           0        339    99    Medium  65        12
+## 71   9.46        89     81          15        237    99      Good  74        12
+## 72   6.50       148     51          16        148   150    Medium  58        17
+## 73   5.52       115     45           0        432   116    Medium  25        15
+## 74  12.61       118     90          10         54   104      Good  31        11
+## 75   6.20       150     68           5        125   136    Medium  64        13
+## 76   8.55        88    111          23        480    92       Bad  36        16
+## 77  10.64       102     87          10        346    70    Medium  64        15
+## 78   7.70       118     71          12         44    89    Medium  67        18
+## 79   4.43       134     48           1        139   145    Medium  65        12
+## 80   9.14       134     67           0        286    90       Bad  41        13
+## 81   8.01       113    100          16        353    79       Bad  68        11
+## 82   7.52       116     72           0        237   128      Good  70        13
+## 83  11.62       151     83           4        325   139      Good  28        17
+## 84   4.42       109     36           7        468    94       Bad  56        11
+## 85   2.23       111     25           0         52   121       Bad  43        18
+## 86   8.47       125    103           0        304   112    Medium  49        13
+## 87   8.70       150     84           9        432   134    Medium  64        15
+## 88  11.70       131     67           7        272   126      Good  54        16
+## 89   6.56       117     42           7        144   111    Medium  62        10
+## 90   7.95       128     66           3        493   119    Medium  45        16
+## 91   5.33       115     22           0        491   103    Medium  64        11
+## 92   4.81        97     46          11        267   107    Medium  80        15
+## 93   4.53       114    113           0         97   125    Medium  29        12
+## 94   8.86       145     30           0         67   104    Medium  55        17
+## 95   8.39       115     97           5        134    84       Bad  55        11
+## 96   5.58       134     25          10        237   148    Medium  59        13
+## 97   9.48       147     42          10        407   132      Good  73        16
+## 98   7.45       161     82           5        287   129       Bad  33        16
+## 99  12.49       122     77          24        382   127      Good  36        16
+## 100  4.88       121     47           3        220   107       Bad  56        16
+## 101  4.11       113     69          11         94   106    Medium  76        12
+## 102  6.20       128     93           0         89   118    Medium  34        18
+## 103  5.30       113     22           0         57    97    Medium  65        16
+## 104  5.07       123     91           0        334    96       Bad  78        17
+## 105  4.62       121     96           0        472   138    Medium  51        12
+## 106  5.55       104    100           8        398    97    Medium  61        11
+## 107  0.16       102     33           0        217   139    Medium  70        18
+## 108  8.55       134    107           0        104   108    Medium  60        12
+## 109  3.47       107     79           2        488   103       Bad  65        16
+## 110  8.98       115     65           0        217    90    Medium  60        17
+## 111  9.00       128     62           7        125   116    Medium  43        14
+## 112  6.62       132    118          12        272   151    Medium  43        14
+## 113  6.67       116     99           5        298   125      Good  62        12
+## 114  6.01       131     29          11        335   127       Bad  33        12
+## 115  9.31       122     87           9         17   106    Medium  65        13
+## 116  8.54       139     35           0         95   129    Medium  42        13
+## 117  5.08       135     75           0        202   128    Medium  80        10
+## 118  8.80       145     53           0        507   119    Medium  41        12
+## 119  7.57       112     88           2        243    99    Medium  62        11
+## 120  7.37       130     94           8        137   128    Medium  64        12
+## 121  6.87       128    105          11        249   131    Medium  63        13
+## 122 11.67       125     89          10        380    87       Bad  28        10
+## 123  6.88       119    100           5         45   108    Medium  75        10
+## 124  8.19       127    103           0        125   155      Good  29        15
+## 125  8.87       131    113           0        181   120      Good  63        14
+## 126  9.34        89     78           0        181    49    Medium  43        15
+## 127 11.27       153     68           2         60   133      Good  59        16
+## 128  6.52       125     48           3        192   116    Medium  51        14
+## 129  4.96       133    100           3        350   126       Bad  55        13
+## 130  4.47       143    120           7        279   147       Bad  40        10
+## 131  8.41        94     84          13        497    77    Medium  51        12
+## 132  6.50       108     69           3        208    94    Medium  77        16
+## 133  9.54       125     87           9        232   136      Good  72        10
+## 134  7.62       132     98           2        265    97       Bad  62        12
+## 135  3.67       132     31           0        327   131    Medium  76        16
+## 136  6.44        96     94          14        384   120    Medium  36        18
+## 137  5.17       131     75           0         10   120       Bad  31        18
+## 138  6.52       128     42           0        436   118    Medium  80        11
+## 139 10.27       125    103          12        371   109    Medium  44        10
+## 140 12.30       146     62          10        310    94    Medium  30        13
+## 141  6.03       133     60          10        277   129    Medium  45        18
+## 142  6.53       140     42           0        331   131       Bad  28        15
+## 143  7.44       124     84           0        300   104    Medium  77        15
+## 144  0.53       122     88           7         36   159       Bad  28        17
+## 145  9.09       132     68           0        264   123      Good  34        11
+## 146  8.77       144     63          11         27   117    Medium  47        17
+## 147  3.90       114     83           0        412   131       Bad  39        14
+## 148 10.51       140     54           9        402   119      Good  41        16
+## 149  7.56       110    119           0        384    97    Medium  72        14
+## 150 11.48       121    120          13        140    87    Medium  56        11
+## 151 10.49       122     84           8        176   114      Good  57        10
+## 152 10.77       111     58          17        407   103      Good  75        17
+## 153  7.64       128     78           0        341   128      Good  45        13
+## 154  5.93       150     36           7        488   150    Medium  25        17
+## 155  6.89       129     69          10        289   110    Medium  50        16
+## 156  7.71        98     72           0         59    69    Medium  65        16
+## 157  7.49       146     34           0        220   157      Good  51        16
+## 158 10.21       121     58           8        249    90    Medium  48        13
+## 159 12.53       142     90           1        189   112      Good  39        10
+## 160  9.32       119     60           0        372    70       Bad  30        18
+## 161  4.67       111     28           0        486   111    Medium  29        12
+## 162  2.93       143     21           5         81   160    Medium  67        12
+## 163  3.63       122     74           0        424   149    Medium  51        13
+## 164  5.68       130     64           0         40   106       Bad  39        17
+## 165  8.22       148     64           0         58   141    Medium  27        13
+## 166  0.37       147     58           7        100   191       Bad  27        15
+## 167  6.71       119     67          17        151   137    Medium  55        11
+## 168  6.71       106     73           0        216    93    Medium  60        13
+## 169  7.30       129     89           0        425   117    Medium  45        10
+## 170 11.48       104     41          15        492    77      Good  73        18
+## 171  8.01       128     39          12        356   118    Medium  71        10
+## 172 12.49        93    106          12        416    55    Medium  75        15
+## 173  9.03       104    102          13        123   110      Good  35        16
+## 174  6.38       135     91           5        207   128    Medium  66        18
+## 175  0.00       139     24           0        358   185    Medium  79        15
+## 176  7.54       115     89           0         38   122    Medium  25        12
+## 177  5.61       138    107           9        480   154    Medium  47        11
+## 178 10.48       138     72           0        148    94    Medium  27        17
+## 179 10.66       104     71          14         89    81    Medium  25        14
+## 180  7.78       144     25           3         70   116    Medium  77        18
+## 181  4.94       137    112          15        434   149       Bad  66        13
+## 182  7.43       121     83           0         79    91    Medium  68        11
+## 183  4.74       137     60           4        230   140       Bad  25        13
+## 184  5.32       118     74           6        426   102    Medium  80        18
+## 185  9.95       132     33           7         35    97    Medium  60        11
+## 186 10.07       130    100          11        449   107    Medium  64        10
+## 187  8.68       120     51           0         93    86    Medium  46        17
+## 188  6.03       117     32           0        142    96       Bad  62        17
+## 189  8.07       116     37           0        426    90    Medium  76        15
+## 190 12.11       118    117          18        509   104    Medium  26        15
+## 191  8.79       130     37          13        297   101    Medium  37        13
+## 192  6.67       156     42          13        170   173      Good  74        14
+## 193  7.56       108     26           0        408    93    Medium  56        14
+## 194 13.28       139     70           7         71    96      Good  61        10
+## 195  7.23       112     98          18        481   128    Medium  45        11
+## 196  4.19       117     93           4        420   112       Bad  66        11
+## 197  4.10       130     28           6        410   133       Bad  72        16
+## 198  2.52       124     61           0        333   138    Medium  76        16
+## 199  3.62       112     80           5        500   128    Medium  69        10
+## 200  6.42       122     88           5        335   126    Medium  64        14
+## 201  5.56       144     92           0        349   146    Medium  62        12
+## 202  5.94       138     83           0        139   134    Medium  54        18
+## 203  4.10       121     78           4        413   130       Bad  46        10
+## 204  2.05       131     82           0        132   157       Bad  25        14
+## 205  8.74       155     80           0        237   124    Medium  37        14
+## 206  5.68       113     22           1        317   132    Medium  28        12
+## 207  4.97       162     67           0         27   160    Medium  77        17
+## 208  8.19       111    105           0        466    97       Bad  61        10
+## 209  7.78        86     54           0        497    64       Bad  33        12
+## 210  3.02        98     21          11        326    90       Bad  76        11
+## 211  4.36       125     41           2        357   123       Bad  47        14
+## 212  9.39       117    118          14        445   120    Medium  32        15
+## 213 12.04       145     69          19        501   105    Medium  45        11
+## 214  8.23       149     84           5        220   139    Medium  33        10
+## 215  4.83       115    115           3         48   107    Medium  73        18
+## 216  2.34       116     83          15        170   144       Bad  71        11
+## 217  5.73       141     33           0        243   144    Medium  34        17
+## 218  4.34       106     44           0        481   111    Medium  70        14
+## 219  9.70       138     61          12        156   120    Medium  25        14
+## 220 10.62       116     79          19        359   116      Good  58        17
+## 221 10.59       131    120          15        262   124    Medium  30        10
+## 222  6.43       124     44           0        125   107    Medium  80        11
+## 223  7.49       136    119           6        178   145    Medium  35        13
+## 224  3.45       110     45           9        276   125    Medium  62        14
+## 225  4.10       134     82           0        464   141    Medium  48        13
+## 226  6.68       107     25           0        412    82       Bad  36        14
+## 227  7.80       119     33           0        245   122      Good  56        14
+## 228  8.69       113     64          10         68   101    Medium  57        16
+## 229  5.40       149     73          13        381   163       Bad  26        11
+## 230 11.19        98    104           0        404    72    Medium  27        18
+## 231  5.16       115     60           0        119   114       Bad  38        14
+## 232  8.09       132     69           0        123   122    Medium  27        11
+## 233 13.14       137     80          10         24   105      Good  61        15
+## 234  8.65       123     76          18        218   120    Medium  29        14
+## 235  9.43       115     62          11        289   129      Good  56        16
+## 236  5.53       126     32           8         95   132    Medium  50        17
+## 237  9.32       141     34          16        361   108    Medium  69        10
+## 238  9.62       151     28           8        499   135    Medium  48        10
+## 239  7.36       121     24           0        200   133      Good  73        13
+## 240  3.89       123    105           0        149   118       Bad  62        16
+## 241 10.31       159     80           0        362   121    Medium  26        18
+## 242 12.01       136     63           0        160    94    Medium  38        12
+## 243  4.68       124     46           0        199   135    Medium  52        14
+## 244  7.82       124     25          13         87   110    Medium  57        10
+## 245  8.78       130     30           0        391   100    Medium  26        18
+## 246 10.00       114     43           0        199    88      Good  57        10
+## 247  6.90       120     56          20        266    90       Bad  78        18
+## 248  5.04       123    114           0        298   151       Bad  34        16
+## 249  5.36       111     52           0         12   101    Medium  61        11
+## 250  5.05       125     67           0         86   117       Bad  65        11
+## 251  9.16       137    105          10        435   156      Good  72        14
+## 252  3.72       139    111           5        310   132       Bad  62        13
+## 253  8.31       133     97           0         70   117    Medium  32        16
+## 254  5.64       124     24           5        288   122    Medium  57        12
+## 255  9.58       108    104          23        353   129      Good  37        17
+## 256  7.71       123     81           8        198    81       Bad  80        15
+## 257  4.20       147     40           0        277   144    Medium  73        10
+## 258  8.67       125     62          14        477   112    Medium  80        13
+## 259  3.47       108     38           0        251    81       Bad  72        14
+## 260  5.12       123     36          10        467   100       Bad  74        11
+## 261  7.67       129    117           8        400   101       Bad  36        10
+## 262  5.71       121     42           4        188   118    Medium  54        15
+## 263  6.37       120     77          15         86   132    Medium  48        18
+## 264  7.77       116     26           6        434   115    Medium  25        17
+## 265  6.95       128     29           5        324   159      Good  31        15
+## 266  5.31       130     35          10        402   129       Bad  39        17
+## 267  9.10       128     93          12        343   112      Good  73        17
+## 268  5.83       134     82           7        473   112       Bad  51        12
+## 269  6.53       123     57           0         66   105    Medium  39        11
+## 270  5.01       159     69           0        438   166    Medium  46        17
+## 271 11.99       119     26           0        284    89      Good  26        10
+## 272  4.55       111     56           0        504   110    Medium  62        16
+## 273 12.98       113     33           0         14    63      Good  38        12
+## 274 10.04       116    106           8        244    86    Medium  58        12
+## 275  7.22       135     93           2         67   119    Medium  34        11
+## 276  6.67       107    119          11        210   132    Medium  53        11
+## 277  6.93       135     69          14        296   130    Medium  73        15
+## 278  7.80       136     48          12        326   125    Medium  36        16
+## 279  7.22       114    113           2        129   151      Good  40        15
+## 280  3.42       141     57          13        376   158    Medium  64        18
+## 281  2.86       121     86          10        496   145       Bad  51        10
+## 282 11.19       122     69           7        303   105      Good  45        16
+## 283  7.74       150     96           0         80   154      Good  61        11
+## 284  5.36       135    110           0        112   117    Medium  80        16
+## 285  6.97       106     46          11        414    96       Bad  79        17
+## 286  7.60       146     26          11        261   131    Medium  39        10
+## 287  7.53       117    118          11        429   113    Medium  67        18
+## 288  6.88        95     44           4        208    72       Bad  44        17
+## 289  6.98       116     40           0         74    97    Medium  76        15
+## 290  8.75       143     77          25        448   156    Medium  43        17
+## 291  9.49       107    111          14        400   103    Medium  41        11
+## 292  6.64       118     70           0        106    89       Bad  39        17
+## 293 11.82       113     66          16        322    74      Good  76        15
+## 294 11.28       123     84           0         74    89      Good  59        10
+## 295 12.66       148     76           3        126    99      Good  60        11
+## 296  4.21       118     35          14        502   137    Medium  79        10
+## 297  8.21       127     44          13        160   123      Good  63        18
+## 298  3.07       118     83          13        276   104       Bad  75        10
+## 299 10.98       148     63           0        312   130      Good  63        15
+## 300  9.40       135     40          17        497    96    Medium  54        17
+## 301  8.57       116     78           1        158    99    Medium  45        11
+## 302  7.41        99     93           0        198    87    Medium  57        16
+## 303  5.28       108     77          13        388   110       Bad  74        14
+## 304 10.01       133     52          16        290    99    Medium  43        11
+## 305 11.93       123     98          12        408   134      Good  29        10
+## 306  8.03       115     29          26        394   132    Medium  33        13
+## 307  4.78       131     32           1         85   133    Medium  48        12
+## 308  5.90       138     92           0         13   120       Bad  61        12
+## 309  9.24       126     80          19        436   126    Medium  52        10
+## 310 11.18       131    111          13         33    80       Bad  68        18
+## 311  9.53       175     65          29        419   166    Medium  53        12
+## 312  6.15       146     68          12        328   132       Bad  51        14
+## 313  6.80       137    117           5        337   135       Bad  38        10
+## 314  9.33       103     81           3        491    54    Medium  66        13
+## 315  7.72       133     33          10        333   129      Good  71        14
+## 316  6.39       131     21           8        220   171      Good  29        14
+## 317 15.63       122     36           5        369    72      Good  35        10
+## 318  6.41       142     30           0        472   136      Good  80        15
+## 319 10.08       116     72          10        456   130      Good  41        14
+## 320  6.97       127     45          19        459   129    Medium  57        11
+## 321  5.86       136     70          12        171   152    Medium  44        18
+## 322  7.52       123     39           5        499    98    Medium  34        15
+## 323  9.16       140     50          10        300   139      Good  60        15
+## 324 10.36       107    105          18        428   103    Medium  34        12
+## 325  2.66       136     65           4        133   150       Bad  53        13
+## 326 11.70       144     69          11        131   104    Medium  47        11
+## 327  4.69       133     30           0        152   122    Medium  53        17
+## 328  6.23       112     38          17        316   104    Medium  80        16
+## 329  3.15       117     66           1         65   111       Bad  55        11
+## 330 11.27       100     54           9        433    89      Good  45        12
+## 331  4.99       122     59           0        501   112       Bad  32        14
+## 332 10.10       135     63          15        213   134    Medium  32        10
+## 333  5.74       106     33          20        354   104    Medium  61        12
+## 334  5.87       136     60           7        303   147    Medium  41        10
+## 335  7.63        93    117           9        489    83       Bad  42        13
+## 336  6.18       120     70          15        464   110    Medium  72        15
+## 337  5.17       138     35           6         60   143       Bad  28        18
+## 338  8.61       130     38           0        283   102    Medium  80        15
+## 339  5.97       112     24           0        164   101    Medium  45        11
+## 340 11.54       134     44           4        219   126      Good  44        15
+## 341  7.50       140     29           0        105    91       Bad  43        16
+## 342  7.38        98    120           0        268    93    Medium  72        10
+## 343  7.81       137    102          13        422   118    Medium  71        10
+## 344  5.99       117     42          10        371   121       Bad  26        14
+## 345  8.43       138     80           0        108   126      Good  70        13
+## 346  4.81       121     68           0        279   149      Good  79        12
+## 347  8.97       132    107           0        144   125    Medium  33        13
+## 348  6.88        96     39           0        161   112      Good  27        14
+## 349 12.57       132    102          20        459   107      Good  49        11
+## 350  9.32       134     27          18        467    96    Medium  49        14
+## 351  8.64       111    101          17        266    91    Medium  63        17
+## 352 10.44       124    115          16        458   105    Medium  62        16
+## 353 13.44       133    103          14        288   122      Good  61        17
+## 354  9.45       107     67          12        430    92    Medium  35        12
+## 355  5.30       133     31           1         80   145    Medium  42        18
+## 356  7.02       130    100           0        306   146      Good  42        11
+## 357  3.58       142    109           0        111   164      Good  72        12
+## 358 13.36       103     73           3        276    72    Medium  34        15
+## 359  4.17       123     96          10         71   118       Bad  69        11
+## 360  3.13       130     62          11        396   130       Bad  66        14
+## 361  8.77       118     86           7        265   114      Good  52        15
+## 362  8.68       131     25          10        183   104    Medium  56        15
+## 363  5.25       131     55           0         26   110       Bad  79        12
+## 364 10.26       111     75           1        377   108      Good  25        12
+## 365 10.50       122     21          16        488   131      Good  30        14
+## 366  6.53       154     30           0        122   162    Medium  57        17
+## 367  5.98       124     56          11        447   134    Medium  53        12
+## 368 14.37        95    106           0        256    53      Good  52        17
+## 369 10.71       109     22          10        348    79      Good  74        14
+## 370 10.26       135    100          22        463   122    Medium  36        14
+## 371  7.68       126     41          22        403   119       Bad  42        12
+## 372  9.08       152     81           0        191   126    Medium  54        16
+## 373  7.80       121     50           0        508    98    Medium  65        11
+## 374  5.58       137     71           0        402   116    Medium  78        17
+## 375  9.44       131     47           7         90   118    Medium  47        12
+## 376  7.90       132     46           4        206   124    Medium  73        11
+## 377 16.27       141     60          19        319    92      Good  44        11
+## 378  6.81       132     61           0        263   125    Medium  41        12
+## 379  6.11       133     88           3        105   119    Medium  79        12
+## 380  5.81       125    111           0        404   107       Bad  54        15
+## 381  9.64       106     64          10         17    89    Medium  68        17
+## 382  3.90       124     65          21        496   151       Bad  77        13
+## 383  4.95       121     28          19        315   121    Medium  66        14
+## 384  9.35        98    117           0         76    68    Medium  63        10
+## 385 12.85       123     37          15        348   112      Good  28        12
+## 386  5.87       131     73          13        455   132    Medium  62        17
+## 387  5.32       152    116           0        170   160    Medium  39        16
+## 388  8.67       142     73          14        238   115    Medium  73        14
+## 389  8.14       135     89          11        245    78       Bad  79        16
+## 390  8.44       128     42           8        328   107    Medium  35        12
+## 391  5.47       108     75           9         61   111    Medium  67        12
+## 392  6.10       153     63           0         49   124       Bad  56        16
+## 393  4.53       129     42          13        315   130       Bad  34        13
+## 394  5.57       109     51          10         26   120    Medium  30        17
+## 395  5.35       130     58          19        366   139       Bad  33        16
+## 396 12.57       138    108          17        203   128      Good  33        14
+## 397  6.14       139     23           3         37   120    Medium  55        11
+## 398  7.41       162     26          12        368   159    Medium  40        18
+## 399  5.94       100     79           7        284    95       Bad  50        12
+## 400  9.71       134     37           0         27   120      Good  49        16
+##     Urban  US
+## 1     Yes Yes
+## 2     Yes Yes
+## 3     Yes Yes
+## 4     Yes Yes
+## 5     Yes  No
+## 6      No Yes
+## 7     Yes  No
+## 8     Yes Yes
+## 9      No  No
+## 10     No Yes
+## 11     No Yes
+## 12    Yes Yes
+## 13    Yes  No
+## 14    Yes Yes
+## 15    Yes Yes
+## 16     No  No
+## 17    Yes  No
+## 18    Yes Yes
+## 19     No Yes
+## 20    Yes Yes
+## 21    Yes Yes
+## 22     No Yes
+## 23    Yes  No
+## 24    Yes  No
+## 25    Yes Yes
+## 26     No  No
+## 27     No Yes
+## 28    Yes  No
+## 29    Yes Yes
+## 30    Yes Yes
+## 31    Yes  No
+## 32    Yes Yes
+## 33     No Yes
+## 34    Yes Yes
+## 35    Yes Yes
+## 36     No Yes
+## 37     No  No
+## 38    Yes Yes
+## 39    Yes  No
+## 40     No  No
+## 41     No  No
+## 42    Yes  No
+## 43    Yes  No
+## 44    Yes Yes
+## 45    Yes Yes
+## 46    Yes Yes
+## 47     No Yes
+## 48    Yes  No
+## 49    Yes  No
+## 50    Yes  No
+## 51    Yes Yes
+## 52    Yes  No
+## 53    Yes Yes
+## 54    Yes Yes
+## 55     No Yes
+## 56    Yes Yes
+## 57    Yes  No
+## 58    Yes  No
+## 59    Yes Yes
+## 60    Yes  No
+## 61    Yes Yes
+## 62     No  No
+## 63    Yes Yes
+## 64    Yes Yes
+## 65     No Yes
+## 66     No  No
+## 67    Yes  No
+## 68    Yes Yes
+## 69    Yes Yes
+## 70    Yes  No
+## 71    Yes Yes
+## 72     No Yes
+## 73    Yes  No
+## 74     No Yes
+## 75     No Yes
+## 76     No Yes
+## 77    Yes Yes
+## 78     No Yes
+## 79    Yes Yes
+## 80    Yes  No
+## 81    Yes Yes
+## 82    Yes  No
+## 83    Yes Yes
+## 84    Yes Yes
+## 85     No  No
+## 86     No  No
+## 87    Yes  No
+## 88     No Yes
+## 89    Yes Yes
+## 90     No  No
+## 91     No  No
+## 92    Yes Yes
+## 93    Yes  No
+## 94    Yes  No
+## 95    Yes Yes
+## 96    Yes Yes
+## 97     No Yes
+## 98    Yes Yes
+## 99     No Yes
+## 100    No Yes
+## 101    No Yes
+## 102   Yes  No
+## 103    No  No
+## 104   Yes Yes
+## 105   Yes  No
+## 106   Yes Yes
+## 107    No  No
+## 108   Yes  No
+## 109   Yes  No
+## 110    No  No
+## 111   Yes Yes
+## 112   Yes Yes
+## 113   Yes Yes
+## 114   Yes Yes
+## 115   Yes Yes
+## 116   Yes  No
+## 117    No  No
+## 118   Yes  No
+## 119   Yes Yes
+## 120   Yes Yes
+## 121   Yes Yes
+## 122   Yes Yes
+## 123   Yes Yes
+## 124    No Yes
+## 125   Yes  No
+## 126    No  No
+## 127   Yes Yes
+## 128   Yes Yes
+## 129   Yes Yes
+## 130    No Yes
+## 131   Yes Yes
+## 132   Yes  No
+## 133   Yes Yes
+## 134   Yes Yes
+## 135   Yes  No
+## 136    No Yes
+## 137    No  No
+## 138   Yes  No
+## 139   Yes Yes
+## 140    No Yes
+## 141   Yes Yes
+## 142   Yes  No
+## 143   Yes  No
+## 144   Yes Yes
+## 145    No  No
+## 146   Yes Yes
+## 147   Yes  No
+## 148    No Yes
+## 149    No Yes
+## 150   Yes Yes
+## 151    No Yes
+## 152    No Yes
+## 153    No  No
+## 154    No Yes
+## 155    No Yes
+## 156   Yes  No
+## 157   Yes  No
+## 158    No Yes
+## 159    No Yes
+## 160    No  No
+## 161    No  No
+## 162    No Yes
+## 163   Yes  No
+## 164    No  No
+## 165    No Yes
+## 166   Yes Yes
+## 167   Yes Yes
+## 168   Yes  No
+## 169   Yes  No
+## 170   Yes Yes
+## 171   Yes Yes
+## 172   Yes Yes
+## 173   Yes Yes
+## 174   Yes Yes
+## 175    No  No
+## 176   Yes  No
+## 177    No Yes
+## 178   Yes Yes
+## 179    No Yes
+## 180   Yes Yes
+## 181   Yes Yes
+## 182   Yes  No
+## 183   Yes  No
+## 184   Yes Yes
+## 185    No Yes
+## 186   Yes Yes
+## 187    No  No
+## 188   Yes  No
+## 189   Yes  No
+## 190    No Yes
+## 191    No Yes
+## 192   Yes Yes
+## 193    No  No
+## 194   Yes Yes
+## 195   Yes Yes
+## 196   Yes Yes
+## 197   Yes Yes
+## 198   Yes  No
+## 199   Yes Yes
+## 200   Yes Yes
+## 201    No  No
+## 202   Yes  No
+## 203    No Yes
+## 204   Yes  No
+## 205   Yes  No
+## 206   Yes  No
+## 207   Yes Yes
+## 208    No  No
+## 209   Yes  No
+## 210    No Yes
+## 211    No Yes
+## 212   Yes Yes
+## 213   Yes Yes
+## 214   Yes Yes
+## 215   Yes Yes
+## 216   Yes Yes
+## 217   Yes  No
+## 218    No  No
+## 219   Yes Yes
+## 220   Yes Yes
+## 221   Yes Yes
+## 222   Yes  No
+## 223   Yes Yes
+## 224   Yes Yes
+## 225    No  No
+## 226   Yes  No
+## 227   Yes  No
+## 228   Yes Yes
+## 229    No Yes
+## 230    No  No
+## 231    No  No
+## 232    No  No
+## 233   Yes Yes
+## 234    No Yes
+## 235    No Yes
+## 236   Yes Yes
+## 237   Yes Yes
+## 238   Yes Yes
+## 239   Yes  No
+## 240   Yes Yes
+## 241   Yes  No
+## 242   Yes  No
+## 243    No  No
+## 244   Yes Yes
+## 245   Yes  No
+## 246    No Yes
+## 247   Yes Yes
+## 248   Yes  No
+## 249   Yes Yes
+## 250   Yes  No
+## 251   Yes Yes
+## 252   Yes Yes
+## 253   Yes  No
+## 254    No Yes
+## 255   Yes Yes
+## 256   Yes Yes
+## 257   Yes  No
+## 258   Yes Yes
+## 259    No  No
+## 260    No Yes
+## 261   Yes Yes
+## 262   Yes Yes
+## 263   Yes Yes
+## 264   Yes Yes
+## 265   Yes Yes
+## 266   Yes Yes
+## 267    No Yes
+## 268    No Yes
+## 269   Yes  No
+## 270   Yes  No
+## 271   Yes  No
+## 272   Yes  No
+## 273   Yes  No
+## 274   Yes Yes
+## 275   Yes Yes
+## 276   Yes Yes
+## 277   Yes Yes
+## 278   Yes Yes
+## 279    No Yes
+## 280   Yes Yes
+## 281   Yes Yes
+## 282    No Yes
+## 283   Yes  No
+## 284    No  No
+## 285    No  No
+## 286   Yes Yes
+## 287    No Yes
+## 288   Yes Yes
+## 289    No  No
+## 290   Yes Yes
+## 291    No Yes
+## 292   Yes  No
+## 293   Yes Yes
+## 294   Yes  No
+## 295   Yes Yes
+## 296    No Yes
+## 297   Yes Yes
+## 298   Yes Yes
+## 299   Yes  No
+## 300    No Yes
+## 301   Yes Yes
+## 302   Yes Yes
+## 303   Yes Yes
+## 304   Yes Yes
+## 305   Yes Yes
+## 306   Yes Yes
+## 307   Yes Yes
+## 308   Yes  No
+## 309   Yes Yes
+## 310   Yes Yes
+## 311   Yes Yes
+## 312   Yes Yes
+## 313   Yes Yes
+## 314   Yes  No
+## 315   Yes Yes
+## 316   Yes Yes
+## 317   Yes Yes
+## 318    No  No
+## 319    No Yes
+## 320    No Yes
+## 321   Yes Yes
+## 322   Yes  No
+## 323   Yes Yes
+## 324   Yes Yes
+## 325   Yes Yes
+## 326   Yes Yes
+## 327   Yes  No
+## 328   Yes Yes
+## 329   Yes Yes
+## 330   Yes Yes
+## 331    No  No
+## 332   Yes Yes
+## 333   Yes Yes
+## 334   Yes Yes
+## 335   Yes Yes
+## 336   Yes Yes
+## 337   Yes  No
+## 338   Yes  No
+## 339   Yes  No
+## 340   Yes Yes
+## 341   Yes  No
+## 342    No  No
+## 343    No Yes
+## 344   Yes Yes
+## 345    No Yes
+## 346   Yes  No
+## 347    No  No
+## 348    No  No
+## 349   Yes Yes
+## 350    No Yes
+## 351    No Yes
+## 352    No Yes
+## 353   Yes Yes
+## 354    No Yes
+## 355   Yes Yes
+## 356   Yes  No
+## 357   Yes  No
+## 358   Yes Yes
+## 359   Yes Yes
+## 360   Yes Yes
+## 361    No Yes
+## 362    No Yes
+## 363   Yes Yes
+## 364   Yes  No
+## 365   Yes Yes
+## 366    No  No
+## 367    No Yes
+## 368   Yes  No
+## 369    No Yes
+## 370   Yes Yes
+## 371   Yes Yes
+## 372   Yes  No
+## 373    No  No
+## 374   Yes  No
+## 375   Yes Yes
+## 376   Yes  No
+## 377   Yes Yes
+## 378    No  No
+## 379   Yes Yes
+## 380   Yes  No
+## 381   Yes Yes
+## 382   Yes Yes
+## 383   Yes Yes
+## 384   Yes  No
+## 385   Yes Yes
+## 386   Yes Yes
+## 387   Yes  No
+## 388    No Yes
+## 389   Yes Yes
+## 390   Yes Yes
+## 391   Yes Yes
+## 392   Yes  No
+## 393   Yes Yes
+## 394    No Yes
+## 395   Yes Yes
+## 396   Yes Yes
+## 397    No Yes
+## 398   Yes Yes
+## 399   Yes Yes
+## 400   Yes Yes</code></pre>
+<div class="sourceCode" id="cb95"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb95-1"><a href="linear-regression.html#cb95-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create a recipe</span></span>
+<span id="cb95-2"><a href="linear-regression.html#cb95-2" aria-hidden="true" tabindex="-1"></a>rec_spec <span class="ot">&lt;-</span> recipes<span class="sc">::</span><span class="fu">recipe</span>(Sales <span class="sc">~</span> ., <span class="at">data =</span> Carseats) <span class="sc">%&gt;%</span> </span>
+<span id="cb95-3"><a href="linear-regression.html#cb95-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_dummy</span>(<span class="fu">all_nominal</span>()) <span class="sc">%&gt;%</span> </span>
+<span id="cb95-4"><a href="linear-regression.html#cb95-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_interact</span>(<span class="sc">~</span> Income<span class="sc">:</span>Advertising <span class="sc">+</span> Price<span class="sc">:</span>Age)</span>
+<span id="cb95-5"><a href="linear-regression.html#cb95-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb95-6"><a href="linear-regression.html#cb95-6" aria-hidden="true" tabindex="-1"></a><span class="co"># create a workflow</span></span>
+<span id="cb95-7"><a href="linear-regression.html#cb95-7" aria-hidden="true" tabindex="-1"></a>carseats_wf <span class="ot">&lt;-</span> workflows<span class="sc">::</span><span class="fu">workflow</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb95-8"><a href="linear-regression.html#cb95-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_model</span>(lm_spec_2) <span class="sc">%&gt;%</span> </span>
+<span id="cb95-9"><a href="linear-regression.html#cb95-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_recipe</span>(rec_spec)</span>
+<span id="cb95-10"><a href="linear-regression.html#cb95-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb95-11"><a href="linear-regression.html#cb95-11" aria-hidden="true" tabindex="-1"></a><span class="co"># run the workflow</span></span>
+<span id="cb95-12"><a href="linear-regression.html#cb95-12" aria-hidden="true" tabindex="-1"></a>wf_out <span class="ot">&lt;-</span> carseats_wf <span class="sc">%&gt;%</span> </span>
+<span id="cb95-13"><a href="linear-regression.html#cb95-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(Carseats)</span>
+<span id="cb95-14"><a href="linear-regression.html#cb95-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb95-15"><a href="linear-regression.html#cb95-15" aria-hidden="true" tabindex="-1"></a><span class="fu">tidy</span>(wf_out) <span class="co">#%&gt;% </span></span></code></pre></div>
+<pre><code>## # A tibble: 14 x 5
+##    term                  estimate std.error statistic   p.value
+##    &lt;chr&gt;                    &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+##  1 (Intercept)           6.58      1.01         6.52  2.22e- 10
+##  2 CompPrice             0.0929    0.00412     22.6   1.64e- 72
+##  3 Income                0.0109    0.00260      4.18  3.57e-  5
+##  4 Advertising           0.0702    0.0226       3.11  2.03e-  3
+##  5 Population            0.000159  0.000368     0.433 6.65e-  1
+##  6 Price                -0.101     0.00744    -13.5   1.74e- 34
+##  7 Age                  -0.0579    0.0160      -3.63  3.18e-  4
+##  8 Education            -0.0209    0.0196      -1.06  2.88e-  1
+##  9 ShelveLoc_Good        4.85      0.153       31.7   1.38e-109
+## 10 ShelveLoc_Medium      1.95      0.126       15.5   1.34e- 42
+## 11 Urban_Yes             0.140     0.112        1.25  2.13e-  1
+## 12 US_Yes               -0.158     0.149       -1.06  2.91e-  1
+## 13 Income_x_Advertising  0.000751  0.000278     2.70  7.29e-  3
+## 14 Price_x_Age           0.000107  0.000133     0.801 4.24e-  1</code></pre>
+<div class="sourceCode" id="cb97"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb97-1"><a href="linear-regression.html#cb97-1" aria-hidden="true" tabindex="-1"></a> <span class="co">#kableExtra::kable()</span></span></code></pre></div>
+</div>
+<div id="conceptual-questions" class="section level2" number="3.2">
+<h2><span class="header-section-number">3.2</span> Conceptual questions</h2>
 <p><strong>Question 1: null hypotheses for p-values in Table 3.4</strong></p>
 <p>Each of the four p-values in table 3.4 relate to the null hypotheses that each corresponding coefficient is zero. Based on these p-values we can conclude that there is strong evidence that the <code>Intercept</code>, and the <code>TV</code> and <code>Radio</code> predictors are non zero. That is the null hypotheses corresponding to each of these coefficients can be rejected. Or in other words, the <code>TV</code> and <code>Radio</code> variables can be helpful in predicting <code>Sales</code>. We cannot reject the null hypothesis associated the <code>Newspaper</code> variable, as the corresponding p-value is greater than 1 minus the confidence level (assumed to be 95% in this case). In other words there is not strong evidence that <code>Newspaper</code> (in conjuction with the other predictors) can be helpful in predicting <code>Sales</code>.</p>
 <p><strong>Question 2: differences between KNN classifier and KNN regression methods</strong></p>
@@ -196,13 +2422,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p><strong>Question 3: interpreting coefficients</strong></p>
 <p><em>(a):</em> It is likely that (ii) is correct. The coefficient for the main effect gender is positive (B<sub>3</sub> is 35), so for a fixed value of GPA and IQ we would expect females to earn more. There is an interaction term, between GPA and gender but this is not relevant because we are assuming GPA is a fixed value.</p>
 <p><em>(b)</em>:</p>
-<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="linear-regression.html#cb39-1" aria-hidden="true" tabindex="-1"></a>gender <span class="ot">&lt;-</span> <span class="dv">1</span></span>
-<span id="cb39-2"><a href="linear-regression.html#cb39-2" aria-hidden="true" tabindex="-1"></a>IQ <span class="ot">&lt;-</span> <span class="dv">110</span></span>
-<span id="cb39-3"><a href="linear-regression.html#cb39-3" aria-hidden="true" tabindex="-1"></a>GPA <span class="ot">&lt;-</span> <span class="fl">4.0</span></span>
-<span id="cb39-4"><a href="linear-regression.html#cb39-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb39-5"><a href="linear-regression.html#cb39-5" aria-hidden="true" tabindex="-1"></a>salary <span class="ot">&lt;-</span> <span class="dv">50</span> <span class="sc">+</span> (<span class="dv">20</span> <span class="sc">*</span> GPA) <span class="sc">+</span> (<span class="fl">0.07</span> <span class="sc">*</span> IQ) <span class="sc">+</span> (<span class="dv">35</span> <span class="sc">*</span> gender) <span class="sc">+</span> (<span class="fl">0.01</span> <span class="sc">*</span> GPA <span class="sc">*</span> IQ) <span class="sc">+</span> (<span class="sc">-</span><span class="dv">10</span> <span class="sc">*</span> GPA <span class="sc">*</span> gender)</span>
-<span id="cb39-6"><a href="linear-regression.html#cb39-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb39-7"><a href="linear-regression.html#cb39-7" aria-hidden="true" tabindex="-1"></a>salary</span></code></pre></div>
+<div class="sourceCode" id="cb98"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb98-1"><a href="linear-regression.html#cb98-1" aria-hidden="true" tabindex="-1"></a>gender <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb98-2"><a href="linear-regression.html#cb98-2" aria-hidden="true" tabindex="-1"></a>IQ <span class="ot">&lt;-</span> <span class="dv">110</span></span>
+<span id="cb98-3"><a href="linear-regression.html#cb98-3" aria-hidden="true" tabindex="-1"></a>GPA <span class="ot">&lt;-</span> <span class="fl">4.0</span></span>
+<span id="cb98-4"><a href="linear-regression.html#cb98-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb98-5"><a href="linear-regression.html#cb98-5" aria-hidden="true" tabindex="-1"></a>salary <span class="ot">&lt;-</span> <span class="dv">50</span> <span class="sc">+</span> (<span class="dv">20</span> <span class="sc">*</span> GPA) <span class="sc">+</span> (<span class="fl">0.07</span> <span class="sc">*</span> IQ) <span class="sc">+</span> (<span class="dv">35</span> <span class="sc">*</span> gender) <span class="sc">+</span> (<span class="fl">0.01</span> <span class="sc">*</span> GPA <span class="sc">*</span> IQ) <span class="sc">+</span> (<span class="sc">-</span><span class="dv">10</span> <span class="sc">*</span> GPA <span class="sc">*</span> gender)</span>
+<span id="cb98-6"><a href="linear-regression.html#cb98-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb98-7"><a href="linear-regression.html#cb98-7" aria-hidden="true" tabindex="-1"></a>salary</span></code></pre></div>
 <pre><code>## [1] 137.1</code></pre>
 <p><em>(c)</em>: True - given the GPA/IQ coefficient is very small it is unlikely that it’s p-value would show statistical significant, because assume the standard error of the coefficient is non-zero the confidence interval for the coefficient will encompass zero.</p>
 <p><strong>Question 4: linear versus cubic regression</strong></p>
@@ -213,8 +2439,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p><strong>Question 5</strong></p>
 <p>Answer in notebook.</p>
 </div>
-<div id="applied-questions" class="section level2" number="3.2">
-<h2><span class="header-section-number">3.2</span> Applied questions</h2>
+<div id="applied-questions" class="section level2" number="3.3">
+<h2><span class="header-section-number">3.3</span> Applied questions</h2>
 
 </div>
 </div>
